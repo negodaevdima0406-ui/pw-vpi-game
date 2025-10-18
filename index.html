@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.W. - Politic World ВПИ</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0c1445 0%, #1a237e 50%, #283593 100%);
+            color: #e8eaf6;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #7986cb, #3949ab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .welcome {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .admin-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .admin-btn {
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .chats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .chat-btn {
+            padding: 15px 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #c5cae9;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .chat-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .all-chats-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #5c6bc0, #3949ab);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1em;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .all-chats-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(57, 73, 171, 0.4);
+        }
+
+        .game-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-title {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #7986cb;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #c5cae9;
+            font-size: 0.95em;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #66bb6a, #4caf50);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            background: rgba(76, 175, 80, 0.7);
+        }
+
+        .music-btn.muted {
+            background: rgba(244, 67, 54, 0.7);
+        }
+
+        .form-note {
+            text-align: center;
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-top: 10px;
+            color: #c5cae9;
+        }
+
+        .anketa-header {
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ffd700, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">P.W.</div>
+            <div class="welcome">Добро пожаловать в P.W.</div>
+        </div>
+
+        <div class="admin-section">
+            <a href="https://t.me/OksikWizer" class="admin-btn" target="_blank">
+                Связь с главным админом
+            </a>
+            <a href="https://t.me/SchattenKaiser_0" class="admin-btn" target="_blank">
+                Тех. поддержка
+            </a>
+        </div>
+
+        <a href="#" class="all-chats-btn" id="allChatsBtn">
+            📋 Все чаты проекта
+        </a>
+        
+        <div class="chats-grid" id="chatsGrid">
+        </div>
+        
+        <div class="game-section">
+            <div class="anketa-header">⚡🌍 АНКЕТА 🌍⚡</div>
+            <form id="gameForm">
+                <div class="form-group">
+                    <label for="name">1. Ваше имя:</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">2. Сколько вам лет:</label>
+                    <input type="number" id="age" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">3. Где живёте (страна, город):</label>
+                    <input type="text" id="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="countryName">4. Название вашей страны:</label>
+                    <input type="text" id="countryName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="flag">5. Флаг вашей страны (ссылка на фото):</label>
+                    <input type="url" id="flag" placeholder="https://example.com/flag.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="currency">6. Название валюты вашей страны:</label>
+                    <input type="text" id="currency" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="president">7. Президент вашей страны:</label>
+                    <input type="text" id="president" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="politics">8. Политика вашей страны:</label>
+                    <textarea id="politics" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="territory">9. Территория вашей страны (ссылка на фото):</label>
+                    <input type="url" id="territory" placeholder="https://example.com/map.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="capital">10. Название столицы вашей страны:</label>
+                    <input type="text" id="capital" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">11. Был ли у вас опыт рп в похожем проекте?:</label>
+                    <textarea id="experience" required placeholder="Ответьте подробно на вопрос"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="referrer">12. Юз человека, который вам прислал эту анкету (@никнейм):</label>
+                    <input type="text" id="referrer" required placeholder="@username">
+                </div>
+
+                <div class="form-group">
+                    <label for="peoples">13. Какие народы проживают у вас в стране?:</label>
+                    <textarea id="peoples" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="population">14. Сколько людей проживают в вашей стране?:</label>
+                    <input type="text" id="population" required placeholder="Например: 10 миллионов">
+                </div>
+
+                <div class="form-group">
+                    <label for="languages">15. Какие у вас государственные языки в стране?:</label>
+                    <input type="text" id="languages" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">16. Ваш ЮЗ (username):</label>
+                    <input type="text" id="username" required placeholder="@your_username">
+                </div>
+
+                <button type="submit" class="submit-btn">🎯 Отправить заявку админу</button>
+                
+                <div class="form-note">
+                    Вашу анкету может принять только администратор проекта. (👍/👎)
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button class="music-btn" id="playBtn">🎵</button>
+        <button class="music-btn" id="muteBtn">🔇</button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+       
+    </audio>
+
+    <script>
+       
+        let tg = Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+        tg.setHeaderColor('#1a237e');
+        tg.backgroundColor = '#1a237e';
+
+        const chats = [
+            "Карты", "Армии стран", "Даты", "НРП ЧАТ (общий)", "Правила Проекта",
+            "Новолжская Федерация", "Интервидение EBU", "АРА", "РС", "АФД",
+            "Рейспакт", "Валюты стран", "Республика Фиррия", "РФ", "ФСИМР",
+            "КФ", "КНГ", "ВНР", "СМ", "КСР", "АФ", "САИ", "Ростовская Федерация",
+            "Творчество", "Компании", "Мемы", "РГА", "Войны, СВО, Теракты",
+            "Исторические события", "Военная техника", "Флаги", "ОНР", "ЭСИмгеР",
+            "ЧРИ", "Индрастан", "ЧШО", "Переговорная", "ТДМ", "СШФ", "Рейтинг"
+         ];
+         
+        const chatsGrid = document.getElementById('chatsGrid');
+        chats.forEach(chat => {
+            const chatBtn = document.createElement('a');
+            chatBtn.className = 'chat-btn';
+            chatBtn.href = `https://t.me/PW_VPI_bot?start=chat_${chat.replace(/\s+/g, '_')}`;
+            chatBtn.target = '_blank';
+            chatBtn.textContent = chat;
+            chatsGrid.appendChild(chatBtn);
+        });
+
+        document.getElementById('gameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                location: document.getElementById('location').value,
+                countryName: document.getElementById('countryName').value,
+                flag: document.getElementById('flag').value,
+                currency: document.getElementById('currency').value,
+                president: document.getElementById('president').value,
+                politics: document.getElementById('politics').value,
+                territory: document.getElementById('territory').value,
+                capital: document.getElementById('capital').value,
+                experience: document.getElementById('experience').value,
+                referrer: document.getElementById('referrer').value,
+                peoples: document.getElementById('peoples').value,
+                population: document.getElementById('population').value,
+                languages: document.getElementById('languages').value,
+                username: document.getElementById('username').value,
+                timestamp: new Date().toLocaleString('ru-RU')
+            };
+
+            // Форматирование сообщения для админа
+            const message = `⚡🌍 НОВАЯ АНКЕТА ВПИ 🌍⚡\n\n` +
+                          `👤 Имя: ${formData.name}\n` +
+                          `🎂 Возраст: ${formData.age}\n` +
+                          `📍 Место: ${formData.location}\n` +
+                          `🇺🇳 Страна: ${formData.countryName}\n` +
+                          `🏛️ Президент: ${formData.president}\n` +
+                          `💰 Валюта: ${formData.currency}\n` +
+                          `🏙️ Столица: ${formData.capital}\n` +
+                          `👥 Население: ${formData.population}\n` +
+                          `🗣️ Народы: ${formData.peoples}\n` +
+                          `🌐 Языки: ${formData.languages}\n` +
+                          `📊 Политика: ${formData.politics}\n` +
+                          `🎮 Опыт РП: ${formData.experience}\n` +
+                          `📎 Флаг: ${formData.flag || 'Не указан'}\n` +
+                          `🗺️ Территория: ${formData.territory || 'Не указана'}\n` +
+                          `👥 Пригласил: ${formData.referrer}\n` +
+                          `🔖 ЮЗ: ${formData.username}\n\n` +
+                          `⏰ Время подачи: ${formData.timestamp}\n\n` +
+                          `✅ Решение админа: (👍/👎)`;
+
+            // Открываем чат с админом для отправки заявки
+            window.open(`https://t.me/OksikWizer?text=${encodeURIComponent(message)}`, '_blank');
+           
+            alert('✅ Анкета отправлена! Ожидайте решения админа @OksikWizer');
+           
+            this.reset();
+        });
+        
+        const playBtn = document.getElementById('playBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        let isPlaying = false;
+        let isMuted = false;
+
+        playBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                backgroundMusic.pause();
+                playBtn.textContent = '🎵';
+                isPlaying = false;
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.log('Автовоспроизведение заблокировано');
+                    alert('Нажмите "OK" для запуска музыки');
+                });
+                playBtn.textContent = '⏸️';
+                isPlaying = true;
+            }
+        });
+
+        muteBtn.addEventListener('click', function() {
+            if (isMuted) {
+                backgroundMusic.muted = false;
+                muteBtn.textContent = '🔇'
+                muteBtn.classList.remove('muted');
+                isMuted = false;
+            } else {
+                backgroundMusic.muted = true;
+                muteBtn.textContent = '🔊';
+                muteBtn.classList.add('muted');
+                isMuted = true;
+            }
+        });
+
+     
+        document.getElementById('allChatsBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const chatButtons = document.querySelectorAll('.chat-btn');
+            chatButtons.forEach(btn => {
+                btn.style.display = btn.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        console.log('P.W. - Politic World ВПИ loaded successfully!');
+    </script>
+</body>
+</html>
