@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P.W. - Politic World ВПИ</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -14,15 +15,71 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0c1445 0%, #1a237e 50%, #283593 100%);
-            color: #e8eaf6;
             min-height: 100vh;
             line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme {
+            background: linear-gradient(135deg, #0c1445 0%, #1a237e 50%, #283593 100%);
+            color: #e8eaf6;
+        }
+
+        .light-theme {
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #B0E0E6 100%);
+            color: #2c3e50;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
         }
 
         .container {
             max-width: 100%;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .header {
@@ -30,6 +87,14 @@
             margin-bottom: 30px;
             padding: 20px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dark-theme .header {
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+
+        .light-theme .header {
+            border-bottom-color: rgba(0,0,0,0.1);
         }
 
         .logo {
@@ -41,10 +106,42 @@
             margin-bottom: 10px;
         }
 
-        .welcome {
-            font-size: 1.2em;
-            opacity: 0.9;
+        .light-theme .logo {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .version {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8em;
+            opacity: 0.5;
+            z-index: 1000;
+        }
+
+        .admin-panel {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
             margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .admin-section {
@@ -59,7 +156,7 @@
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 10px;
-            color: white;
+            color: inherit;
             text-decoration: none;
             text-align: center;
             backdrop-filter: blur(10px);
@@ -83,16 +180,27 @@
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
-            color: #c5cae9;
+            color: inherit;
             text-decoration: none;
             text-align: center;
             font-size: 0.9em;
             transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dark-theme .chat-btn {
+            color: #c5cae9;
+        }
+
+        .light-theme .chat-btn {
+            color: #2c3e50;
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
         .chat-btn:hover {
             background: rgba(255,255,255,0.1);
-            color: white;
+            transform: translateY(-2px);
         }
 
         .all-chats-btn {
@@ -108,6 +216,11 @@
             text-decoration: none;
             margin-bottom: 30px;
             transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .light-theme .all-chats-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
         }
 
         .all-chats-btn:hover {
@@ -121,6 +234,12 @@
             padding: 20px;
             margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .light-theme .game-section {
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(0,0,0,0.1);
         }
 
         .game-title {
@@ -130,6 +249,10 @@
             color: #7986cb;
         }
 
+        .light-theme .game-title {
+            color: #2c3e50;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -137,8 +260,15 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #c5cae9;
             font-size: 0.95em;
+        }
+
+        .dark-theme .form-group label {
+            color: #c5cae9;
+        }
+
+        .light-theme .form-group label {
+            color: #2c3e50;
         }
 
         .form-group input, .form-group select, .form-group textarea {
@@ -147,8 +277,16 @@
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
-            color: white;
+            color: inherit;
             font-size: 1em;
+        }
+
+        .light-theme .form-group input, 
+        .light-theme .form-group select, 
+        .light-theme .form-group textarea {
+            background: rgba(255,255,255,0.5);
+            border: 1px solid rgba(0,0,0,0.2);
+            color: #2c3e50;
         }
 
         .form-group textarea {
@@ -177,7 +315,7 @@
         .music-controls {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -213,7 +351,6 @@
             font-size: 0.9em;
             opacity: 0.7;
             margin-top: 10px;
-            color: #c5cae9;
         }
 
         .anketa-header {
@@ -225,9 +362,88 @@
             -webkit-text-fill-color: transparent;
             font-weight: bold;
         }
+
+        .chat-interface {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .light-theme .chat-interface {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .messages-container {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .light-theme .messages-container {
+            border-color: rgba(0,0,0,0.2);
+        }
+
+        .message-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: inherit;
+        }
+
+        .light-theme .message-input input {
+            background: rgba(255,255,255,0.5);
+            border-color: rgba(0,0,0,0.2);
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #5c6bc0, #3949ab);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .light-theme .send-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        .war-interface, .economy-interface, .profile-interface {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .light-theme .war-interface,
+        .light-theme .economy-interface,
+        .light-theme .profile-interface {
+            background: rgba(255,255,255,0.3);
+        }
     </style>
 </head>
-<body>
+<body class="dark-theme">
+    <div class="stars" id="stars"></div>
+    <div class="clouds" id="clouds" style="display: none;"></div>
+
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+    <div class="version">Alpha 11.0</div>
+
     <div class="container">
         <div class="header">
             <div class="logo">P.W.</div>
@@ -243,13 +459,12 @@
             </a>
         </div>
 
-        <a href="#" class="all-chats-btn" id="allChatsBtn">
+        <button class="all-chats-btn" id="allChatsBtn">
             📋 Все чаты проекта
-        </a>
-        
-        <div class="chats-grid" id="chatsGrid">
-        </div>
-        
+        </button>
+
+        <div class="chats-grid" id="chatsGrid"></div>
+
         <div class="game-section">
             <div class="anketa-header">⚡🌍 АНКЕТА 🌍⚡</div>
             <form id="gameForm">
@@ -309,8 +524,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="referrer">12. Юз человека, который вам прислал эту анкету (@никнейм):</label>
-                    <input type="text" id="referrer" required placeholder="@username">
+                    <label for="username">12. Ваш юзернейм (@example):</label>
+                    <input type="text" id="username" required placeholder="@username">
                 </div>
 
                 <div class="form-group">
@@ -329,8 +544,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="username">16. Ваш ЮЗ (username):</label>
-                    <input type="text" id="username" required placeholder="@your_username">
+                    <label for="countryCode">16. Код вашей страны (Трёхзначный из букв):</label>
+                    <input type="text" id="countryCode" required placeholder="RUS" maxlength="3">
+                </div>
+
+                <div class="form-group">
+                    <label for="capitalMap">17. Покажите на карте вашего государства столицу (фото):</label>
+                    <input type="url" id="capitalMap" placeholder="https://example.com/capital-map.jpg">
                 </div>
 
                 <button type="submit" class="submit-btn">🎯 Отправить заявку админу</button>
@@ -340,6 +560,30 @@
                 </div>
             </form>
         </div>
+
+        <div class="chat-interface" id="chatInterface">
+            <h3 id="currentChatName">Чат</h3>
+            <div class="messages-container" id="messagesContainer"></div>
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="Введите сообщение...">
+                <button class="send-btn" id="sendMessageBtn">Отправить</button>
+            </div>
+        </div>
+
+        <div class="war-interface" id="warInterface">
+            <h3>⚔️ Система войн</h3>
+            <p>Функционал в разработке...</p>
+        </div>
+
+        <div class="economy-interface" id="economyInterface">
+            <h3>💰 Экономика</h3>
+            <p>Функционал в разработке...</p>
+        </div>
+
+        <div class="profile-interface" id="profileInterface">
+            <h3>👤 Профиль</h3>
+            <p>Функционал в разработке...</p>
+        </div>
     </div>
 
     <div class="music-controls">
@@ -347,14 +591,17 @@
         <button class="music-btn" id="muteBtn">🔇</button>
     </div>
 
-    <audio id="backgroundMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-       
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Hammock/Everything_and_Nothing/Hammock_-_01_-_Clarity.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-       
+        const SUPABASE_URL = 'https://bthzclsnjjcztmizbcxz.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0aHpjbHNuampjenRtaXpiY3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MzUwOTYsImV4cCI6MjA3NjIxMTA5Nn0.axcQgx9kt2AGJT7joutknUjvoDd71Hu5j6luzwZkY0g';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let tg = Telegram.WebApp;
+        
         tg.expand();
         tg.enableClosingConfirmation();
         tg.setHeaderColor('#1a237e');
@@ -364,21 +611,84 @@
             "Карты", "Армии стран", "Даты", "НРП ЧАТ (общий)", "Правила Проекта",
             "Новолжская Федерация", "Интервидение EBU", "АРА", "РС", "АФД",
             "Рейспакт", "Валюты стран", "Республика Фиррия", "РФ", "ФСИМР",
-            "КФ", "КНГ", "ВНР", "СМ", "КСР", "АФ", "САИ", "Ростовская Федерация",
-            "Творчество", "Компании", "Мемы", "РГА", "Войны, СВО, Теракты",
-            "Исторические события", "Военная техника", "Флаги", "ОНР", "ЭСИмгеР",
-            "ЧРИ", "Индрастан", "ЧШО", "Переговорная", "ТДМ", "СШФ", "Рейтинг"
-         ];
-         
-        const chatsGrid = document.getElementById('chatsGrid');
-        chats.forEach(chat => {
-            const chatBtn = document.createElement('a');
-            chatBtn.className = 'chat-btn';
-            chatBtn.href = `https://t.me/PW_VPI_bot?start=chat_${chat.replace(/\s+/g, '_')}`;
-            chatBtn.target = '_blank';
-            chatBtn.textContent = chat;
-            chatsGrid.appendChild(chatBtn);
-        });
+            "КФ", "КНГ", "ВНР", "СМ", "ФТ ((Тианция) код TIA)", "АФ", "САИ", 
+            "Ростовская Федерация", "Творчество", "Компании", "Мемы", "РГА", 
+            "Войны, СВО, Теракты", "Исторические события", "Военная техника", 
+            "Флаги", "ОНР", "ЭСИмгеР", "ЧРИ", "Индрастан", "ЧШО", "Переговорная", 
+            "ТДМ", "СШФ", "Рейтинг"
+        ];
+
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function createClouds() {
+            const cloudsContainer = document.getElementById('clouds');
+            for (let i = 0; i < 20; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.width = Math.random() * 100 + 50 + 'px';
+                cloud.style.height = Math.random() * 60 + 30 + 'px';
+                cloud.style.top = Math.random() * 100 + '%';
+                cloud.style.animationDelay = Math.random() * 20 + 's';
+                cloud.style.animationDuration = (Math.random() * 30 + 20) + 's';
+                cloudsContainer.appendChild(cloud);
+            }
+        }
+
+        function initChats() {
+            const chatsGrid = document.getElementById('chatsGrid');
+            chats.forEach(chat => {
+                const chatBtn = document.createElement('button');
+                chatBtn.className = 'chat-btn';
+                chatBtn.textContent = chat;
+                chatBtn.onclick = () => openChat(chat);
+                chatsGrid.appendChild(chatBtn);
+            });
+        }
+
+        function openChat(chatName) {
+            document.getElementById('currentChatName').textContent = chatName;
+            document.getElementById('chatInterface').style.display = 'block';
+            document.getElementById('warInterface').style.display = 'none';
+            document.getElementById('economyInterface').style.display = 'none';
+            document.getElementById('profileInterface').style.display = 'none';
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const stars = document.getElementById('stars');
+            const clouds = document.getElementById('clouds');
+            
+            if (body.classList.contains('dark-theme')) {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeToggle.textContent = '☀️';
+                stars.style.display = 'none';
+                clouds.style.display = 'block';
+                tg.setHeaderColor('#3498db');
+                tg.backgroundColor = '#3498db';
+            } else {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeToggle.textContent = '🌙';
+                stars.style.display = 'block';
+                clouds.style.display = 'none';
+                tg.setHeaderColor('#1a237e');
+                tg.backgroundColor = '#1a237e';
+            }
+        }
 
         document.getElementById('gameForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -395,15 +705,15 @@
                 territory: document.getElementById('territory').value,
                 capital: document.getElementById('capital').value,
                 experience: document.getElementById('experience').value,
-                referrer: document.getElementById('referrer').value,
+                username: document.getElementById('username').value,
                 peoples: document.getElementById('peoples').value,
                 population: document.getElementById('population').value,
                 languages: document.getElementById('languages').value,
-                username: document.getElementById('username').value,
+                countryCode: document.getElementById('countryCode').value,
+                capitalMap: document.getElementById('capitalMap').value,
                 timestamp: new Date().toLocaleString('ru-RU')
             };
 
-            // Форматирование сообщения для админа
             const message = `⚡🌍 НОВАЯ АНКЕТА ВПИ 🌍⚡\n\n` +
                           `👤 Имя: ${formData.name}\n` +
                           `🎂 Возраст: ${formData.age}\n` +
@@ -417,21 +727,21 @@
                           `🌐 Языки: ${formData.languages}\n` +
                           `📊 Политика: ${formData.politics}\n` +
                           `🎮 Опыт РП: ${formData.experience}\n` +
+                          `🔤 Код страны: ${formData.countryCode}\n` +
                           `📎 Флаг: ${formData.flag || 'Не указан'}\n` +
                           `🗺️ Территория: ${formData.territory || 'Не указана'}\n` +
-                          `👥 Пригласил: ${formData.referrer}\n` +
+                          `📍 Карта столицы: ${formData.capitalMap || 'Не указана'}\n` +
                           `🔖 ЮЗ: ${formData.username}\n\n` +
                           `⏰ Время подачи: ${formData.timestamp}\n\n` +
                           `✅ Решение админа: (👍/👎)`;
 
-            // Открываем чат с админом для отправки заявки
             window.open(`https://t.me/OksikWizer?text=${encodeURIComponent(message)}`, '_blank');
-           
+            
             alert('✅ Анкета отправлена! Ожидайте решения админа @OksikWizer');
-           
+            
             this.reset();
         });
-        
+
         const playBtn = document.getElementById('playBtn');
         const muteBtn = document.getElementById('muteBtn');
         const backgroundMusic = document.getElementById('backgroundMusic');
@@ -446,7 +756,6 @@
             } else {
                 backgroundMusic.play().catch(e => {
                     console.log('Автовоспроизведение заблокировано');
-                    alert('Нажмите "OK" для запуска музыки');
                 });
                 playBtn.textContent = '⏸️';
                 isPlaying = true;
@@ -456,7 +765,7 @@
         muteBtn.addEventListener('click', function() {
             if (isMuted) {
                 backgroundMusic.muted = false;
-                muteBtn.textContent = '🔇'
+                muteBtn.textContent = '🔇';
                 muteBtn.classList.remove('muted');
                 isMuted = false;
             } else {
@@ -467,7 +776,6 @@
             }
         });
 
-     
         document.getElementById('allChatsBtn').addEventListener('click', function(e) {
             e.preventDefault();
             const chatButtons = document.querySelectorAll('.chat-btn');
@@ -476,7 +784,13 @@
             });
         });
 
-        console.log('P.W. - Politic World ВПИ loaded successfully!');
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+        createStars();
+        createClouds();
+        initChats();
+
+        console.log('P.W. Alpha 11.0 loaded successfully!');
     </script>
 </body>
 </html>
