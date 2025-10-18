@@ -80,7 +80,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 250px;
+            width: 280px;
             height: 100vh;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
@@ -150,7 +150,7 @@
         }
 
         .container.sidebar-open {
-            margin-left: 250px;
+            margin-left: 280px;
         }
 
         .header {
@@ -208,15 +208,16 @@
         }
 
         .sidebar-section {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .sidebar-title {
-            font-size: 1.1em;
-            margin-bottom: 15px;
+            font-size: 1em;
+            margin-bottom: 12px;
             color: #7986cb;
             border-bottom: 1px solid rgba(255,255,255,0.2);
             padding-bottom: 5px;
+            font-weight: bold;
         }
 
         .light-theme .sidebar-title {
@@ -227,15 +228,15 @@
         .sidebar-btn {
             display: block;
             width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 8px;
+            padding: 10px 12px;
+            margin-bottom: 6px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            border-radius: 6px;
             color: inherit;
             text-decoration: none;
             text-align: left;
-            font-size: 0.9em;
+            font-size: 0.85em;
             transition: all 0.3s ease;
             cursor: pointer;
             border-left: 3px solid transparent;
@@ -244,7 +245,7 @@
         .sidebar-btn:hover {
             background: rgba(255,255,255,0.1);
             border-left-color: #7986cb;
-            transform: translateX(5px);
+            transform: translateX(3px);
         }
 
         .light-theme .sidebar-btn {
@@ -495,21 +496,63 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
-            <div class="sidebar-title">🌍 Основные чаты</div>
+            <div class="sidebar-title">🗺️ Основные разделы</div>
             <button class="sidebar-btn" onclick="openChat('Карты')">🗺️ Карты</button>
             <button class="sidebar-btn" onclick="openChat('Армии стран')">⚔️ Армии стран</button>
-            <button class="sidebar-btn" onclick="openChat('НРП ЧАТ (общий)')">💬 НРП ЧАТ</button>
-            <button class="sidebar-btn" onclick="openChat('Правила Проекта')">📜 Правила</button>
+            <button class="sidebar-btn" onclick="openChat('Даты')">📅 Даты</button>
+            <button class="sidebar-btn" onclick="openChat('НРП ЧАТ (общий)')">💬 НРП ЧАТ (общий)</button>
+            <button class="sidebar-btn" onclick="openChat('Правила Проекта')">📜 Правила Проекта</button>
         </div>
 
         <div class="sidebar-section">
-            <div class="sidebar-title">🏛️ Государства</div>
-            <button class="sidebar-btn" onclick="openChat('Новолжская Федерация')">🇷🇺 Новолжская Федерация</button>
+            <div class="sidebar-title">🏛️ Государства и организации</div>
+            <button class="sidebar-btn" onclick="openChat('Новолжская Федерация')">🏴 Новолжская Федерация</button>
+            <button class="sidebar-btn" onclick="openChat('Интервидение EBU')">📡 Интервидение EBU</button>
+            <button class="sidebar-btn" onclick="openChat('АРА')">🔶 АРА</button>
+            <button class="sidebar-btn" onclick="openChat('РС')">🔷 РС</button>
+            <button class="sidebar-btn" onclick="openChat('АФД')">🔴 АФД</button>
+            <button class="sidebar-btn" onclick="openChat('Рейспакт')">⚖️ Рейспакт</button>
+            <button class="sidebar-btn" onclick="openChat('Валюты стран')">💰 Валюты стран</button>
             <button class="sidebar-btn" onclick="openChat('Республика Фиррия')">🏴 Республика Фиррия</button>
+            <button class="sidebar-btn" onclick="openChat('РФ')">🏳️ РФ</button>
+            <button class="sidebar-btn" onclick="openChat('ФСИМР')">🔵 ФСИМР</button>
+            <button class="sidebar-btn" onclick="openChat('КФ')">🟣 КФ</button>
+            <button class="sidebar-btn" onclick="openChat('КНГ')">🟢 КНГ</button>
+            <button class="sidebar-btn" onclick="openChat('ВНР')">🟡 ВНР</button>
+            <button class="sidebar-btn" onclick="openChat('СМ')">⚪ СМ</button>
             <button class="sidebar-btn" onclick="openChat('ФТ ((Тианция) код TIA)')">🇹🇩 ФТ (Тианция)</button>
+            <button class="sidebar-btn" onclick="openChat('АФ')">🔺 АФ</button>
+            <button class="sidebar-btn" onclick="openChat('САИ')">🔸 САИ</button>
             <button class="sidebar-btn" onclick="openChat('Ростовская Федерация')">🏴 Ростовская Федерация</button>
-            <button class="sidebar-btn" onclick="openChat('Индрастан')">🇮🇳 Индрастан</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">💬 Тематические чаты</div>
+            <button class="sidebar-btn" onclick="openChat('Творчество')">🎨 Творчество</button>
+            <button class="sidebar-btn" onclick="openChat('Компании')">🏢 Компании</button>
+            <button class="sidebar-btn" onclick="openChat('Мемы')">😂 Мемы</button>
+            <button class="sidebar-btn" onclick="openChat('РГА')">📊 РГА</button>
+            <button class="sidebar-btn" onclick="openChat('Войны, СВО, Теракты')">💥 Войны, СВО, Теракты</button>
+            <button class="sidebar-btn" onclick="openChat('Исторические события')">📜 Исторические события</button>
+            <button class="sidebar-btn" onclick="openChat('Военная техника')">🚀 Военная техника</button>
+            <button class="sidebar-btn" onclick="openChat('Флаги')">🎌 Флаги</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">🌐 Международные организации</div>
+            <button class="sidebar-btn" onclick="openChat('ОНР')">🌍 ОНР</button>
+            <button class="sidebar-btn" onclick="openChat('ЭСИмгеР')">🔷 ЭСИмгеР</button>
             <button class="sidebar-btn" onclick="openChat('ЧРИ')">🏴 ЧРИ</button>
+            <button class="sidebar-btn" onclick="openChat('Индрастан')">🇮🇳 Индрастан</button>
+            <button class="sidebar-btn" onclick="openChat('ЧШО')">🛡️ ЧШО</button>
+            <button class="sidebar-btn" onclick="openChat('Переговорная')">🤝 Переговорная</button>
+            <button class="sidebar-btn" onclick="openChat('ТДМ')">⚙️ ТДМ</button>
+            <button class="sidebar-btn" onclick="openChat('СШФ')">🏛️ СШФ</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">📈 Экономика и рейтинг</div>
+            <button class="sidebar-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
         </div>
 
         <div class="sidebar-section">
@@ -517,7 +560,6 @@
             <button class="sidebar-btn" onclick="openInterface('war')">⚔️ Войны</button>
             <button class="sidebar-btn" onclick="openInterface('economy')">💰 Экономика</button>
             <button class="sidebar-btn" onclick="openInterface('profile')">👤 Профиль</button>
-            <button class="sidebar-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
         </div>
 
         <div class="sidebar-section">
@@ -704,7 +746,6 @@
             const user = tg.initDataUnsafe?.user;
             if (user && user.username) {
                 isAdmin = ADMIN_USERS.includes(user.username.toLowerCase());
-                console.log('Проверка прав админа:', user.username, isAdmin);
             }
             return isAdmin;
         }
@@ -826,7 +867,6 @@
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             } catch (error) {
                 messagesContainer.innerHTML = '<div class="message">Ошибка загрузки сообщений</div>';
-                console.error('Ошибка загрузки сообщений:', error);
             }
         }
 
@@ -877,7 +917,6 @@
 
                 messageInput.value = '';
             } catch (error) {
-                console.error('Ошибка отправки сообщения:', error);
                 alert('Ошибка отправки сообщения');
             }
         }
@@ -978,7 +1017,6 @@
                         playBtn.textContent = '⏸️';
                         isPlaying = true;
                     }).catch(error => {
-                        console.log('Автовоспроизведение заблокировано');
                         playBtn.textContent = '▶️';
                     });
                 }
@@ -1014,8 +1052,6 @@
         createClouds();
         initMusic();
         checkAdminRights();
-
-        console.log('P.W. Alpha 11.2 loaded successfully!');
     </script>
 </body>
 </html>
