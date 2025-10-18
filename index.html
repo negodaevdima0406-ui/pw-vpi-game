@@ -13,6 +13,14 @@
             box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
         .loading-screen {
             position: fixed;
             top: 0;
@@ -26,7 +34,6 @@
             align-items: center;
             z-index: 10000;
             color: white;
-            font-family: 'Arial', sans-serif;
         }
 
         .earth {
@@ -34,7 +41,6 @@
             height: 150px;
             background: radial-gradient(circle at 30% 30%, #4a8cff, #1a3c7a, #0a1f4d);
             border-radius: 50%;
-            position: relative;
             margin-bottom: 50px;
             animation: rotateEarth 20s linear infinite;
             box-shadow: 
@@ -43,45 +49,9 @@
                 inset 10px 10px 20px rgba(255, 255, 255, 0.1);
         }
 
-        .earth::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 30%;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #3a7a3a, #2d5a2d);
-            border-radius: 50%;
-            box-shadow: 
-                -5px -5px 10px rgba(0, 0, 0, 0.2),
-                2px 2px 5px rgba(255, 255, 255, 0.1);
-        }
-
-        .earth::after {
-            content: '';
-            position: absolute;
-            top: 60%;
-            right: 25%;
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(45deg, #a85534, #8b4513);
-            border-radius: 50%;
-            box-shadow: 
-                -3px -3px 8px rgba(0, 0, 0, 0.2),
-                1px 1px 4px rgba(255, 255, 255, 0.1);
-        }
-
         @keyframes rotateEarth {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 24px;
-            margin-bottom: 30px;
-            text-align: center;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .progress-container {
@@ -90,7 +60,6 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
             margin-bottom: 10px;
         }
 
@@ -108,40 +77,6 @@
             25% { transform: translateX(5px); }
             50% { transform: translateX(-3px); }
             75% { transform: translateX(2px); }
-        }
-
-        .percentage {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .loading-dots {
-            font-size: 24px;
-            margin-top: 10px;
-        }
-
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s steps(4, end) infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60% { content: '...'; }
-            80%, 100% { content: ''; }
-        }
-
-        .main-content {
-            display: none;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            min-height: 100vh;
-            line-height: 1.6;
-            transition: all 0.3s ease;
-            overflow-x: hidden;
         }
 
         .dark-theme {
@@ -206,13 +141,13 @@
             width: 280px;
             height: 100vh;
             background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border-right: 1px solid rgba(255,255,255,0.2);
             padding: 20px;
             overflow-y: auto;
             z-index: 100;
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar.open {
@@ -237,6 +172,12 @@
             cursor: pointer;
             z-index: 101;
             backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
         }
 
         .theme-toggle {
@@ -252,6 +193,12 @@
             cursor: pointer;
             z-index: 1000;
             backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
         }
 
         .version {
@@ -269,7 +216,7 @@
             position: relative;
             z-index: 1;
             margin-left: 0;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .container.sidebar-open {
@@ -281,6 +228,18 @@
             margin-bottom: 30px;
             padding: 20px 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dark-theme .header {
@@ -311,6 +270,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
         }
 
         .admin-btn {
@@ -322,7 +282,7 @@
             text-decoration: none;
             text-align: center;
             backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .admin-btn:hover {
@@ -332,6 +292,18 @@
 
         .sidebar-section {
             margin-bottom: 25px;
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .sidebar-title {
@@ -360,7 +332,7 @@
             text-decoration: none;
             text-align: left;
             font-size: 0.85em;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             border-left: 3px solid transparent;
         }
@@ -368,7 +340,7 @@
         .sidebar-btn:hover {
             background: rgba(255,255,255,0.1);
             border-left-color: #7986cb;
-            transform: translateX(3px);
+            transform: translateX(5px);
         }
 
         .light-theme .sidebar-btn {
@@ -388,6 +360,7 @@
             margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease-out 0.4s both;
         }
 
         .light-theme .game-section {
@@ -432,6 +405,13 @@
             border-radius: 8px;
             color: inherit;
             font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #7986cb;
+            background: rgba(255,255,255,0.15);
         }
 
         .light-theme .form-group input, 
@@ -456,7 +436,7 @@
             color: white;
             font-size: 1.1em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             margin-top: 20px;
         }
 
@@ -484,7 +464,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             color: white;
             font-size: 1.2em;
@@ -523,6 +503,7 @@
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
             display: none;
+            animation: fadeInUp 0.5s ease-out;
         }
 
         .light-theme .chat-interface,
@@ -552,6 +533,18 @@
             background: rgba(255,255,255,0.1);
             border-radius: 8px;
             border-left: 3px solid #7986cb;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .light-theme .message {
@@ -571,6 +564,13 @@
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
             color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .message-input input:focus {
+            outline: none;
+            border-color: #7986cb;
+            background: rgba(255,255,255,0.15);
         }
 
         .light-theme .message-input input {
@@ -585,6 +585,11 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-1px);
         }
 
         .light-theme .send-btn {
@@ -632,7 +637,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 11.6</div>
+    <div class="version">Alpha 11.07</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -640,233 +645,187 @@
             <button class="sidebar-btn" onclick="openChat('Карты')">🗺️ Карты</button>
             <button class="sidebar-btn" onclick="openChat('Армии стран')">⚔️ Армии стран</button>
             <button class="sidebar-btn" onclick="openChat('Даты')">📅 Даты</button>
-            <button class="sidebar-btn" onclick="openChat('НРП ЧАТ (общий)')">💬 НРП ЧАТ (общий)</button>
-            <button class="sidebar-btn" onclick="openChat('Правила Проекта')">📜 Правила Проекта</button>
+            <button class="sidebar-btn" onclick="openChat('НРП чаты')">💬 НРП чаты</button>
+            <button class="sidebar-btn" onclick="openChat('Правила проекта')">📜 Правила проекта</button>
             <button class="sidebar-btn" onclick="openChat('Ивенты')">🎯 Ивенты</button>
-            <button class="sidebar-btn" onclick="openChat('НРК')">🔥 НРК</button>
         </div>
 
         <div class="sidebar-section">
-            <div class="sidebar-title">🏛️ Государства и организации</div>
-            <button class="sidebar-btn" onclick="openChat('Новолжская Федерация')">🏴 Новолжская Федерация</button>
-            <button class="sidebar-btn" onclick="openChat('Интервидение EBU')">📡 Интервидение EBU</button>
+            <div class="sidebar-title">🏛️ Государства</div>
+            <button class="sidebar-btn" onclick="openChat('Новолжская Федерация')">⭐ Новолжская Федерация</button>
+            <button class="sidebar-btn" onclick="openChat('EBU')">📡 EBU</button>
             <button class="sidebar-btn" onclick="openChat('АРА')">🔶 АРА</button>
             <button class="sidebar-btn" onclick="openChat('РС')">🔷 РС</button>
             <button class="sidebar-btn" onclick="openChat('АФД')">🔴 АФД</button>
-            <button class="sidebar-btn" onclick="openChat('Рейспакт')">⚖️ Рейспакт</button>
-            <button class="sidebar-btn" onclick="openChat('Валюты стран')">💰 Валюты стран</button>
-            <button class="sidebar-btn" onclick="openChat('Республика Фиррия')">🏴 Республика Фиррия</button>
-            <button class="sidebar-btn" onclick="openChat('РФ')">🏳️ РФ</button>
+            <button class="sidebar-btn" onclick="openChat('Республика Фиррия')">⭐ Республика Фиррия</button>
+            <button class="sidebar-btn" onclick="openChat('РФ')">⭐ РФ</button>
             <button class="sidebar-btn" onclick="openChat('ФСИМР')">🔵 ФСИМР</button>
             <button class="sidebar-btn" onclick="openChat('КФ')">🟣 КФ</button>
             <button class="sidebar-btn" onclick="openChat('КНГ')">🟢 КНГ</button>
             <button class="sidebar-btn" onclick="openChat('ВНР')">🟡 ВНР</button>
             <button class="sidebar-btn" onclick="openChat('СМ')">⚪ СМ</button>
-            <button class="sidebar-btn" onclick="openChat('ФТ ((Тианция) код TIA)')">🇹🇩 ФТ (Тианция)</button>
+            <button class="sidebar-btn" onclick="openChat('ФТ (Тианция)')">⭐ ФТ (Тианция)</button>
             <button class="sidebar-btn" onclick="openChat('АФ')">🔺 АФ</button>
             <button class="sidebar-btn" onclick="openChat('САИ')">🔸 САИ</button>
-            <button class="sidebar-btn" onclick="openChat('Ростовская Федерация')">🏴 Ростовская Федерация</button>
-        </div>
-
-        <div class="sidebar-section">
-            <div class="sidebar-title">💬 Тематические чаты</div>
-            <button class="sidebar-btn" onclick="openChat('Творчество')">🎨 Творчество</button>
-            <button class="sidebar-btn" onclick="openChat('Компании')">🏢 Компании</button>
-            <button class="sidebar-btn" onclick="openChat('Мемы')">😂 Мемы</button>
-            <button class="sidebar-btn" onclick="openChat('РГА')">📊 РГА</button>
-            <button class="sidebar-btn" onclick="openChat('Войны, СВО, Теракты')">💥 Войны, СВО, Теракты</button>
-            <button class="sidebar-btn" onclick="openChat('Исторические события')">📜 Исторические события</button>
-            <button class="sidebar-btn" onclick="openChat('Военная техника')">🚀 Военная техника</button>
-            <button class="sidebar-btn" onclick="openChat('Флаги')">🎌 Флаги</button>
-        </div>
-
-        <div class="sidebar-section">
-            <div class="sidebar-title">🌐 Международные организации</div>
-            <button class="sidebar-btn" onclick="openChat('ОНР')">🌍 ОНР</button>
+            <button class="sidebar-btn" onclick="openChat('Ростовская Федерация')">⭐ Ростовская Федерация</button>
+            <button class="sidebar-btn" onclick="openChat('Индрастан')">🌄 Индрастан</button>
+            <button class="sidebar-btn" onclick="openChat('ЧРИ')">🌄 ЧРИ</button>
             <button class="sidebar-btn" onclick="openChat('ЭСИмгеР')">🔷 ЭСИмгеР</button>
-            <button class="sidebar-btn" onclick="openChat('ЧРИ')">🏴 ЧРИ</button>
-            <button class="sidebar-btn" onclick="openChat('Индрастан')">🇮🇳 Индрастан</button>
-            <button class="sidebar-btn" onclick="openChat('ЧШО')">🛡️ ЧШО</button>
-            <button class="sidebar-btn" onclick="openChat('Переговорная')">🤝 Переговорная</button>
-            <button class="sidebar-btn" onclick="openChat('ТДМ')">⚙️ ТДМ</button>
-            <button class="sidebar-btn" onclick="openChat('СШФ')">🏛️ СШФ</button>
+            <button class="sidebar-btn" onclick="openChat('ЧШО')">⚔️ ЧШО</button>
+            <button class="sidebar-btn" onclick="openChat('РГА')">📈 РГА</button>
+            <button class="sidebar-btn" onclick="openChat('ОНР')">🌐 ОНР</button>
         </div>
 
         <div class="sidebar-section">
             <div class="sidebar-title">📈 Экономика и рейтинг</div>
             <button class="sidebar-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
             <button class="sidebar-btn" onclick="openChat('Экономика')">💰 Экономика</button>
+            <button class="sidebar-btn" onclick="openChat('Валюты стран')">💱 Валюты стран</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">🌐 Международные организации</div>
+            <button class="sidebar-btn" onclick="openChat('ТДМ')">⚙️ ТДМ</button>
+            <button class="sidebar-btn" onclick="openChat('Компании')">🏛️ Компании</button>
+            <button class="sidebar-btn" onclick="openChat('Интервидение EBU')">🔈 Интервидение EBU</button>
         </div>
 
         <div class="sidebar-section">
             <div class="sidebar-title">🎮 Игровые системы</div>
             <button class="sidebar-btn" onclick="openInterface('war')">⚔️ Войны</button>
-            <button class="sidebar-btn" onclick="openInterface('profile')">👤 Профиль</button>
+            <button class="sidebar-btn" onclick="openInterface('profile')">👨‍💻 Профиль</button>
         </div>
 
         <div class="sidebar-section">
             <div class="sidebar-title">🔧 Админ-панель</div>
             <button class="sidebar-btn" onclick="openAdminPanel()">👑 Админ-панель</button>
         </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">💬 Тематические чаты</div>
+            <button class="sidebar-btn" onclick="openChat('Творчество')">🎨 Творчество</button>
+            <button class="sidebar-btn" onclick="openChat('Мемы')">😄 Мемы</button>
+            <button class="sidebar-btn" onclick="openChat('Войны, СВО, Теракты')">💥 Войны, СВО, Теракты</button>
+            <button class="sidebar-btn" onclick="openChat('Исторические события')">📚 Исторические события</button>
+            <button class="sidebar-btn" onclick="openChat('Военная техника')">🚀 Военная техника</button>
+            <button class="sidebar-btn" onclick="openChat('Флаги')">🎌 Флаги</button>
+        </div>
     </div>
 
     <div class="container" id="mainContainer">
         <div class="header">
-            <div class="logo">P.W.</div>
-            <div class="welcome">Добро пожаловать в P.W.</div>
+            <div class="logo">P.W. - Politic World</div>
+            <div class="subtitle">Виртуальный Политический Имитатор</div>
         </div>
 
-        <div class="admin-section">
-            <a href="https://t.me/OksikWizer" class="admin-btn" target="_blank">
-                Связь с главным админом
-            </a>
-            <a href="https://t.me/SchattenKaiser_0" class="admin-btn" target="_blank">
-                Тех. поддержка
-            </a>
+        <div class="admin-section" id="adminSection" style="display: none;">
+            <button class="admin-btn" onclick="openInterface('economy')">💰 Экономика</button>
+            <button class="admin-btn" onclick="openInterface('war')">⚔️ Войны</button>
+            <button class="admin-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
+            <button class="admin-btn" onclick="openChat('Правила проекта')">📜 Правила</button>
         </div>
 
-        <div class="game-section">
-            <div class="anketa-header">⚡🌍 АНКЕТА 🌍⚡</div>
-            <form id="gameForm">
+        <div class="game-section" id="anketaSection">
+            <div class="anketa-header">📝 Анкета для участия в проекте</div>
+            <form id="anketaForm">
                 <div class="form-group">
-                    <label for="name">1. Ваше имя:</label>
-                    <input type="text" id="name" required>
+                    <label for="countryName">Название страны:</label>
+                    <input type="text" id="countryName" required placeholder="Введите название вашей страны">
                 </div>
-                
                 <div class="form-group">
-                    <label for="age">2. Сколько вам лет:</label>
-                    <input type="number" id="age" required>
+                    <label for="governmentType">Тип правления:</label>
+                    <select id="governmentType" required>
+                        <option value="">Выберите тип правления</option>
+                        <option value="monarchy">Монархия</option>
+                        <option value="republic">Республика</option>
+                        <option value="federation">Федерация</option>
+                        <option value="confederation">Конфедерация</option>
+                    </select>
                 </div>
-                
                 <div class="form-group">
-                    <label for="location">3. Где живёте (страна, город):</label>
-                    <input type="text" id="location" required>
+                    <label for="leaderName">Имя лидера:</label>
+                    <input type="text" id="leaderName" required placeholder="Введите имя лидера">
                 </div>
-
                 <div class="form-group">
-                    <label for="countryName">4. Название вашей страны:</label>
-                    <input type="text" id="countryName" required>
+                    <label for="population">Население:</label>
+                    <input type="number" id="population" required placeholder="Введите количество населения">
                 </div>
-
                 <div class="form-group">
-                    <label for="flag">5. Флаг вашей страны (ссылка на фото):</label>
-                    <input type="url" id="flag" placeholder="https://example.com/flag.jpg">
+                    <label for="description">Описание страны:</label>
+                    <textarea id="description" placeholder="Опишите вашу страну..."></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label for="currency">6. Название валюты вашей страны:</label>
-                    <input type="text" id="currency" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="president">7. Президент вашей страны:</label>
-                    <input type="text" id="president" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="politics">8. Политика вашей страны:</label>
-                    <textarea id="politics" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="territory">9. Территория вашей страны (ссылка на фото):</label>
-                    <input type="url" id="territory" placeholder="https://example.com/map.jpg">
-                </div>
-
-                <div class="form-group">
-                    <label for="capital">10. Название столицы вашей страны:</label>
-                    <input type="text" id="capital" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="experience">11. Был ли у вас опыт рп в похожем проекте?:</label>
-                    <textarea id="experience" required placeholder="Ответьте подробно на вопрос"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="username">12. Ваш юзернейм (@example):</label>
-                    <input type="text" id="username" required placeholder="@username">
-                </div>
-
-                <div class="form-group">
-                    <label for="peoples">13. Какие народы проживают у вас в стране?:</label>
-                    <textarea id="peoples" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="population">14. Сколько людей проживают в вашей стране?:</label>
-                    <input type="text" id="population" required placeholder="Например: 10 миллионов">
-                </div>
-
-                <div class="form-group">
-                    <label for="languages">15. Какие у вас государственные языки в стране?:</label>
-                    <input type="text" id="languages" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="countryCode">16. Код вашей страны (Трёхзначный из букв):</label>
-                    <input type="text" id="countryCode" required placeholder="RUS" maxlength="3">
-                </div>
-
-                <div class="form-group">
-                    <label for="capitalMap">17. Покажите на карте вашего государства столицу (фото):</label>
-                    <input type="url" id="capitalMap" placeholder="https://example.com/capital-map.jpg">
-                </div>
-
-                <button type="submit" class="submit-btn">🎯 Отправить заявку админу</button>
-                
-                <div class="form-note">
-                    Вашу анкету может принять только администратор проекта. (👍/👎)
-                </div>
+                <button type="submit" class="submit-btn">📨 Отправить анкету</button>
             </form>
+            <div class="form-note">После отправки анкеты ожидайте проверки модераторами</div>
         </div>
 
         <div class="chat-interface" id="chatInterface">
-            <h3 id="currentChatName">Чат</h3>
-            <div class="messages-container" id="messagesContainer"></div>
+            <div class="game-title" id="chatTitle">Чат</div>
+            <div class="messages-container" id="messagesContainer">
+                <div class="message">Добро пожаловать в чат! Начните общение.</div>
+            </div>
             <div class="message-input">
                 <input type="text" id="messageInput" placeholder="Введите сообщение...">
-                <button class="send-btn" id="sendMessageBtn">Отправить</button>
+                <button class="send-btn" onclick="sendMessage()">Отправить</button>
             </div>
         </div>
 
         <div class="war-interface" id="warInterface">
-            <h3>⚔️ Система войн</h3>
-            <div class="admin-feature">
-                <h4>Объявить войну</h4>
-                <p>Функционал в разработке...</p>
+            <div class="game-title">⚔️ Система войн</div>
+            <div class="form-group">
+                <label for="warTarget">Цель войны:</label>
+                <select id="warTarget">
+                    <option value="">Выберите страну-цель</option>
+                    <option value="Новолжская Федерация">Новолжская Федерация</option>
+                    <option value="EBU">EBU</option>
+                    <option value="АРА">АРА</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label for="warReason">Причина войны:</label>
+                <textarea id="warReason" placeholder="Опишите причину объявления войны..."></textarea>
+            </div>
+            <button class="submit-btn" onclick="declareWar()">🎯 Объявить войну</button>
         </div>
 
         <div class="economy-interface" id="economyInterface">
-            <h3>💰 Экономика</h3>
-            <div class="admin-feature">
-                <h4>Управление экономикой</h4>
-                <p>Функционал в разработке...</p>
+            <div class="game-title">💰 Экономическая система</div>
+            <div class="form-group">
+                <label>Бюджет страны: <strong>1,000,000 ₽</strong></label>
             </div>
+            <div class="form-group">
+                <label for="taxRate">Налоговая ставка (%):</label>
+                <input type="range" id="taxRate" min="0" max="50" value="20">
+                <span id="taxRateValue">20%</span>
+            </div>
+            <button class="submit-btn" onclick="updateEconomy()">💾 Сохранить изменения</button>
         </div>
 
         <div class="profile-interface" id="profileInterface">
-            <h3>👤 Профиль</h3>
-            <p>Ваш профиль будет здесь...</p>
+            <div class="game-title">👨‍💻 Профиль игрока</div>
+            <div class="form-group">
+                <label>Игрок: <strong id="playerName">Гость</strong></label>
+            </div>
+            <div class="form-group">
+                <label>Статус: <strong id="playerStatus">Новичок</strong></label>
+            </div>
+            <div class="form-group">
+                <label>Репутация: <strong id="playerReputation">100</strong></label>
+            </div>
         </div>
 
         <div class="admin-interface" id="adminInterface">
-            <h3>👑 Админ-панель</h3>
-            <div class="admin-panel" id="adminPanel">
-                <p>Проверка прав доступа...</p>
+            <div class="game-title">👑 Админ-панель</div>
+            <div id="adminContent">
+                <div class="access-denied">Доступ запрещен. Только для администраторов.</div>
             </div>
         </div>
     </div>
 
     <div class="music-controls">
-        <button class="music-btn" id="playBtn">🎵</button>
-        <button class="music-btn" id="muteBtn">🔇</button>
+        <button class="music-btn" id="musicToggle">🎵</button>
+        <button class="music-btn" id="soundToggle">🔊</button>
     </div>
-
-    <audio id="backgroundMusic" loop>
-        <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Hammock/Everything_and_Nothing/Hammock_-_01_-_Clarity.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
         const SUPABASE_URL = 'https://bthzclsnjjcztmizbcxz.supabase.co';
@@ -876,7 +835,7 @@
         let tg = Telegram.WebApp;
         
         const ADMIN_USERS = ['oksikwizer', 'schattenkaiser_0'];
-        const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила Проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
+        const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
         let currentChat = null;
         let isAdmin = false;
 
@@ -885,8 +844,8 @@
             const percentage = document.getElementById('percentage');
             const loadingScreen = document.getElementById('loadingScreen');
             let progress = 0;
-            const totalTime = 25000;
-            const interval = 100;
+            const totalTime = 2500;
+            const interval = 50;
 
             const progressInterval = setInterval(() => {
                 progress += (interval / totalTime) * 100;
@@ -899,7 +858,6 @@
                         loadingScreen.style.opacity = '0';
                         setTimeout(() => {
                             loadingScreen.style.display = 'none';
-                            document.querySelector('.main-content').style.display = 'block';
                             initMainApp();
                         }, 500);
                     }, 500);
@@ -912,52 +870,33 @@
         }
 
         function initMainApp() {
-            tg.expand();
-            tg.enableClosingConfirmation();
-            tg.setHeaderColor('#1a237e');
-            tg.backgroundColor = '#1a237e';
-
-            checkAdminRights();
             createStars();
-            createClouds();
-            initChats();
-            initMusic();
-        }
-
-        function checkAdminRights() {
-            const user = tg.initDataUnsafe?.user;
-            if (user && user.username) {
-                isAdmin = ADMIN_USERS.includes(user.username.toLowerCase());
-            }
-            return isAdmin;
+            initEventListeners();
+            checkAdminStatus();
+            initTelegram();
         }
 
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 200; i++) {
+            for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 2 + 1 + 'px';
+                star.style.height = star.style.width;
                 star.style.animationDelay = Math.random() * 3 + 's';
                 starsContainer.appendChild(star);
             }
         }
 
-        function createClouds() {
-            const cloudsContainer = document.getElementById('clouds');
-            for (let i = 0; i < 20; i++) {
-                const cloud = document.createElement('div');
-                cloud.className = 'cloud';
-                cloud.style.width = Math.random() * 100 + 50 + 'px';
-                cloud.style.height = Math.random() * 60 + 30 + 'px';
-                cloud.style.top = Math.random() * 100 + '%';
-                cloud.style.animationDelay = Math.random() * 20 + 's';
-                cloud.style.animationDuration = (Math.random() * 30 + 20) + 's';
-                cloudsContainer.appendChild(cloud);
-            }
+        function initEventListeners() {
+            document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('anketaForm').addEventListener('submit', submitAnketa);
+            document.getElementById('taxRate').addEventListener('input', updateTaxRate);
+            document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+            document.getElementById('soundToggle').addEventListener('click', toggleSound);
         }
 
         function toggleSidebar() {
@@ -965,170 +904,6 @@
             const container = document.getElementById('mainContainer');
             sidebar.classList.toggle('open');
             container.classList.toggle('sidebar-open');
-        }
-
-        function canUserWriteToChat(chatName) {
-            if (ADMIN_ONLY_CHATS.includes(chatName)) {
-                return isAdmin;
-            }
-            return true;
-        }
-
-        async function openChat(chatName) {
-            currentChat = chatName;
-            document.getElementById('currentChatName').textContent = chatName;
-            showInterface('chatInterface');
-            
-            const messageInput = document.getElementById('messageInput');
-            const sendBtn = document.getElementById('sendMessageBtn');
-            
-            if (canUserWriteToChat(chatName)) {
-                messageInput.disabled = false;
-                messageInput.placeholder = "Введите сообщение...";
-                sendBtn.disabled = false;
-                sendBtn.style.opacity = "1";
-            } else {
-                messageInput.disabled = true;
-                messageInput.placeholder = "Только админы могут писать в этот чат";
-                sendBtn.disabled = true;
-                sendBtn.style.opacity = "0.5";
-            }
-            
-            await loadMessages(chatName);
-            setupChatRealtime(chatName);
-            toggleSidebar();
-        }
-
-        function openInterface(interfaceName) {
-            showInterface(interfaceName + 'Interface');
-            toggleSidebar();
-        }
-
-        function showInterface(interfaceId) {
-            const interfaces = ['chatInterface', 'warInterface', 'economyInterface', 'profileInterface', 'adminInterface'];
-            interfaces.forEach(id => {
-                document.getElementById(id).style.display = 'none';
-            });
-            document.getElementById(interfaceId).style.display = 'block';
-        }
-
-        function openAdminPanel() {
-            if (checkAdminRights()) {
-                document.getElementById('adminPanel').innerHTML = `
-                    <h4>👑 Панель администратора</h4>
-                    <div class="admin-feature">
-                        <h5>Управление пользователями</h5>
-                        <button class="send-btn">Бан пользователя</button>
-                        <button class="send-btn">Мут пользователя</button>
-                    </div>
-                    <div class="admin-feature">
-                        <h5>Управление чатами</h5>
-                        <button class="send-btn">Очистить чат</button>
-                        <button class="send-btn">Закрепить сообщение</button>
-                    </div>
-                    <div class="admin-feature">
-                        <h5>Статистика</h5>
-                        <p>Активных пользователей: 0</p>
-                        <p>Всего сообщений: 0</p>
-                    </div>
-                `;
-                showInterface('adminInterface');
-            } else {
-                document.getElementById('adminPanel').innerHTML = `
-                    <h4>❌ Доступ запрещен</h4>
-                    <p>У вас нет прав администратора</p>
-                    <p>Доступ только для: @OksikWizer и @SchattenKaiser_0</p>
-                `;
-                showInterface('adminInterface');
-            }
-            toggleSidebar();
-        }
-
-        async function loadMessages(chatName) {
-            const messagesContainer = document.getElementById('messagesContainer');
-            messagesContainer.innerHTML = '<div class="message">Загрузка сообщений...</div>';
-            
-            try {
-                const { data: messages, error } = await supabase
-                    .from('messages')
-                    .select('*')
-                    .eq('chat_id', chatName)
-                    .order('created_at', { ascending: true })
-                    .limit(50);
-
-                if (error) throw error;
-
-                messagesContainer.innerHTML = '';
-                if (messages.length === 0) {
-                    messagesContainer.innerHTML = '<div class="message">Пока нет сообщений. Будьте первым!</div>';
-                } else {
-                    messages.forEach(msg => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = 'message';
-                        messageDiv.innerHTML = `<strong>${msg.user_id}:</strong> ${msg.content}`;
-                        messagesContainer.appendChild(messageDiv);
-                    });
-                }
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            } catch (error) {
-                messagesContainer.innerHTML = '<div class="message">Ошибка загрузки сообщений</div>';
-            }
-        }
-
-        function setupChatRealtime(chatName) {
-            supabase
-                .channel('messages')
-                .on('postgres_changes', 
-                    { 
-                        event: 'INSERT', 
-                        schema: 'public', 
-                        table: 'messages',
-                        filter: `chat_id=eq.${chatName}`
-                    }, 
-                    (payload) => {
-                        const messagesContainer = document.getElementById('messagesContainer');
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = 'message';
-                        messageDiv.innerHTML = `<strong>${payload.new.user_id}:</strong> ${payload.new.content}`;
-                        messagesContainer.appendChild(messageDiv);
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    }
-                )
-                .subscribe();
-        }
-
-        async function sendMessage() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
-            
-            if (!message || !currentChat) return;
-            
-            if (!canUserWriteToChat(currentChat)) {
-                alert('❌ Только администраторы могут писать в этот чат');
-                return;
-            }
-
-            try {
-                const user = tg.initDataUnsafe?.user;
-                const username = user?.username || 'Аноним';
-
-                const { error } = await supabase
-                    .from('messages')
-                    .insert([
-                        {
-                            chat_id: currentChat,
-                            user_id: username,
-                            content: message,
-                            created_at: new Date().toISOString()
-                        }
-                    ]);
-
-                if (error) throw error;
-
-                messageInput.value = '';
-            } catch (error) {
-                alert('Ошибка отправки сообщения');
-            }
         }
 
         function toggleTheme() {
@@ -1143,126 +918,221 @@
                 themeToggle.textContent = '☀️';
                 stars.style.display = 'none';
                 clouds.style.display = 'block';
-                tg.setHeaderColor('#3498db');
-                tg.backgroundColor = '#3498db';
+                createClouds();
             } else {
                 body.classList.remove('light-theme');
                 body.classList.add('dark-theme');
                 themeToggle.textContent = '🌙';
                 stars.style.display = 'block';
                 clouds.style.display = 'none';
-                tg.setHeaderColor('#1a237e');
-                tg.backgroundColor = '#1a237e';
             }
         }
 
-        document.getElementById('gameForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function createClouds() {
+            const cloudsContainer = document.getElementById('clouds');
+            cloudsContainer.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.top = Math.random() * 50 + '%';
+                cloud.style.width = Math.random() * 100 + 50 + 'px';
+                cloud.style.height = Math.random() * 30 + 20 + 'px';
+                cloud.style.animationDelay = Math.random() * 20 + 's';
+                cloud.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                cloudsContainer.appendChild(cloud);
+            }
+        }
+
+        function checkAdminStatus() {
+            const username = tg.initDataUnsafe?.user?.username;
+            if (username && ADMIN_USERS.includes(username)) {
+                isAdmin = true;
+                document.getElementById('adminSection').style.display = 'grid';
+            }
+        }
+
+        function initTelegram() {
+            tg.ready();
+            tg.expand();
+        }
+
+        function openChat(chatName) {
+            if (ADMIN_ONLY_CHATS.includes(chatName) && !isAdmin) {
+                alert('Доступ к этому чату только для администраторов');
+                return;
+            }
+
+            currentChat = chatName;
+            hideAllInterfaces();
+            document.getElementById('chatInterface').style.display = 'block';
+            document.getElementById('chatTitle').textContent = chatName;
+            loadMessages(chatName);
+        }
+
+        function openInterface(interfaceType) {
+            hideAllInterfaces();
+            document.getElementById(interfaceType + 'Interface').style.display = 'block';
+        }
+
+        function openAdminPanel() {
+            hideAllInterfaces();
+            document.getElementById('adminInterface').style.display = 'block';
+            
+            if (isAdmin) {
+                document.getElementById('adminContent').innerHTML = `
+                    <div class="admin-panel">
+                        <h3>Административные функции</h3>
+                        <div class="admin-feature">
+                            <button class="submit-btn" onclick="manageUsers()">👥 Управление пользователями</button>
+                        </div>
+                        <div class="admin-feature">
+                            <button class="submit-btn" onclick="manageContent()">📝 Управление контентом</button>
+                        </div>
+                        <div class="admin-feature">
+                            <button class="submit-btn" onclick="systemSettings()">⚙️ Системные настройки</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function hideAllInterfaces() {
+            const interfaces = ['chat', 'war', 'economy', 'profile', 'admin'];
+            interfaces.forEach(interface => {
+                document.getElementById(interface + 'Interface').style.display = 'none';
+            });
+        }
+
+        function submitAnketa(event) {
+            event.preventDefault();
             
             const formData = {
-                name: document.getElementById('name').value,
-                age: document.getElementById('age').value,
-                location: document.getElementById('location').value,
                 countryName: document.getElementById('countryName').value,
-                flag: document.getElementById('flag').value,
-                currency: document.getElementById('currency').value,
-                president: document.getElementById('president').value,
-                politics: document.getElementById('politics').value,
-                territory: document.getElementById('territory').value,
-                capital: document.getElementById('capital').value,
-                experience: document.getElementById('experience').value,
-                username: document.getElementById('username').value,
-                peoples: document.getElementById('peoples').value,
+                governmentType: document.getElementById('governmentType').value,
+                leaderName: document.getElementById('leaderName').value,
                 population: document.getElementById('population').value,
-                languages: document.getElementById('languages').value,
-                countryCode: document.getElementById('countryCode').value,
-                capitalMap: document.getElementById('capitalMap').value,
-                timestamp: new Date().toLocaleString('ru-RU')
+                description: document.getElementById('description').value,
+                timestamp: new Date().toISOString()
             };
 
-            const message = `⚡🌍 НОВАЯ АНКЕТА ВПИ 🌍⚡\n\n` +
-                          `👤 Имя: ${formData.name}\n` +
-                          `🎂 Возраст: ${formData.age}\n` +
-                          `📍 Место: ${formData.location}\n` +
-                          `🇺🇳 Страна: ${formData.countryName}\n` +
-                          `🏛️ Президент: ${formData.president}\n` +
-                          `💰 Валюта: ${formData.currency}\n` +
-                          `🏙️ Столица: ${formData.capital}\n` +
-                          `👥 Население: ${formData.population}\n` +
-                          `🗣️ Народы: ${formData.peoples}\n` +
-                          `🌐 Языки: ${formData.languages}\n` +
-                          `📊 Политика: ${formData.politics}\n` +
-                          `🎮 Опыт РП: ${formData.experience}\n` +
-                          `🔤 Код страны: ${formData.countryCode}\n` +
-                          `📎 Флаг: ${formData.flag || 'Не указан'}\n` +
-                          `🗺️ Территория: ${formData.territory || 'Не указана'}\n` +
-                          `📍 Карта столицы: ${formData.capitalMap || 'Не указана'}\n` +
-                          `🔖 ЮЗ: ${formData.username}\n\n` +
-                          `⏰ Время подачи: ${formData.timestamp}\n\n` +
-                          `✅ Решение админа: (👍/👎)`;
-
-            window.open(`https://t.me/OksikWizer?text=${encodeURIComponent(message)}`, '_blank');
-            
-            alert('✅ Анкета отправлена! Ожидайте решения админа @OksikWizer');
-            
-            this.reset();
-        });
-
-        const playBtn = document.getElementById('playBtn');
-        const muteBtn = document.getElementById('muteBtn');
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        let isPlaying = false;
-        let isMuted = false;
-
-        function initMusic() {
-            backgroundMusic.volume = 0.5;
-            
-            playBtn.addEventListener('click', function() {
-                if (isPlaying) {
-                    backgroundMusic.pause();
-                    playBtn.textContent = '🎵';
-                    isPlaying = false;
-                } else {
-                    backgroundMusic.play().then(() => {
-                        playBtn.textContent = '⏸️';
-                        isPlaying = true;
-                    }).catch(error => {
-                        playBtn.textContent = '▶️';
-                    });
-                }
-            });
-
-            muteBtn.addEventListener('click', function() {
-                if (isMuted) {
-                    backgroundMusic.muted = false;
-                    muteBtn.textContent = '🔇';
-                    muteBtn.classList.remove('muted');
-                    isMuted = false;
-                } else {
-                    backgroundMusic.muted = true;
-                    muteBtn.textContent = '🔊';
-                    muteBtn.classList.add('muted');
-                    isMuted = true;
-                }
-            });
-
-            playBtn.click();
+            alert('Анкета отправлена на модерацию! Ожидайте проверки.');
+            document.getElementById('anketaForm').reset();
         }
 
-        function initChats() {
-        }
-
-        document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
-        document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
-        document.getElementById('messageInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (message && currentChat) {
+                const messagesContainer = document.getElementById('messagesContainer');
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message';
+                messageElement.textContent = message;
+                messagesContainer.appendChild(messageElement);
+                
+                messageInput.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+                saveMessage(currentChat, message);
             }
-        });
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        }
 
-        document.querySelector('.main-content').style.display = 'none';
-        initLoadingScreen();
+        async function loadMessages(chatName) {
+            try {
+                const { data, error } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .eq('chat', chatName)
+                    .order('created_at', { ascending: true });
+                
+                if (error) throw error;
+                
+                const messagesContainer = document.getElementById('messagesContainer');
+                messagesContainer.innerHTML = '';
+                
+                if (data && data.length > 0) {
+                    data.forEach(msg => {
+                        const messageElement = document.createElement('div');
+                        messageElement.className = 'message';
+                        messageElement.textContent = msg.content;
+                        messagesContainer.appendChild(messageElement);
+                    });
+                } else {
+                    messagesContainer.innerHTML = '<div class="message">Нет сообщений в этом чате</div>';
+                }
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } catch (error) {
+                console.error('Ошибка загрузки сообщений:', error);
+            }
+        }
+
+        async function saveMessage(chatName, message) {
+            try {
+                const { error } = await supabase
+                    .from('messages')
+                    .insert([
+                        { 
+                            chat: chatName, 
+                            content: message,
+                            user_id: tg.initDataUnsafe?.user?.id || 'anonymous'
+                        }
+                    ]);
+                
+                if (error) throw error;
+            } catch (error) {
+                console.error('Ошибка сохранения сообщения:', error);
+            }
+        }
+
+        function declareWar() {
+            const target = document.getElementById('warTarget').value;
+            const reason = document.getElementById('warReason').value;
+            
+            if (!target || !reason) {
+                alert('Заполните все поля для объявления войны');
+                return;
+            }
+            
+            alert(`Война объявлена ${target}! Причина: ${reason}`);
+        }
+
+        function updateTaxRate() {
+            const taxRate = document.getElementById('taxRate').value;
+            document.getElementById('taxRateValue').textContent = taxRate + '%';
+        }
+
+        function updateEconomy() {
+            alert('Экономические настройки сохранены!');
+        }
+
+        function toggleMusic() {
+            const musicBtn = document.getElementById('musicToggle');
+            musicBtn.classList.toggle('muted');
+            musicBtn.textContent = musicBtn.classList.contains('muted') ? '🔇' : '🎵';
+        }
+
+        function toggleSound() {
+            const soundBtn = document.getElementById('soundToggle');
+            soundBtn.classList.toggle('muted');
+            soundBtn.textContent = soundBtn.classList.contains('muted') ? '🔈' : '🔊';
+        }
+
+        function manageUsers() {
+            alert('Функция управления пользователями');
+        }
+
+        function manageContent() {
+            alert('Функция управления контентом');
+        }
+
+        function systemSettings() {
+            alert('Функция системных настроек');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initLoadingScreen();
+        });
     </script>
 </body>
 </html>
