@@ -759,7 +759,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 17.07</div>
+    <div class="version">Alpha 17.08</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -964,6 +964,9 @@
                 <div class="form-group">
                     <label>Анкета отправлена: <strong id="anketaStatus">Нет</strong></label>
                 </div>
+                <div class="form-group">
+                    <label>Telegram ID: <strong id="telegramId">-</strong></label>
+                </div>
             </div>
         </div>
 
@@ -1012,15 +1015,23 @@
         let tg = Telegram.WebApp;
         
         const ADMIN_USERS = {
-            'oksikwizer': 'Главный Админ',
-            'schattenkaiser_0': 'Тех. Админ'
+            'OksikWizer': { status: 'Главный Админ', id: null },
+            'SchattenKaiser_0': { status: 'Тех. Админ', id: null }
         };
         
-        const APPROVED_USERS = [
-            'prosto_katsu', 'ncsartist', 'indi224', 'seychellles0808', 
-            'brs6543', 'volnovich_37', 'kotovaski_halky', 'engelscb', 'ettet4t',
-            'oksikwizer', 'schattenkaiser_0'
-        ];
+        const APPROVED_USERS = {
+            'prosto_katsu': { id: null },
+            'NCSartist': { id: null },
+            'indi224': { id: null },
+            'Seychellles0808': { id: null },
+            'Brs6543': { id: null },
+            'Volnovich_37': { id: null },
+            'kotovaski_halky': { id: null },
+            'EngelsCB': { id: null },
+            'ettet4t': { id: null },
+            'OksikWizer': { id: null },
+            'SchattenKaiser_0': { id: null }
+        };
         
         const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
         let currentChat = null;
@@ -1142,27 +1153,47 @@
             if (user) {
                 currentUser = user;
                 const username = user.username;
+                const userId = user.id;
                 const firstName = user.first_name || 'Пользователь';
                 
                 document.getElementById('playerName').textContent = `${firstName} (@${username})`;
+                document.getElementById('telegramId').textContent = userId;
                 
-                if (ADMIN_USERS[username]) {
-                    isAdmin = true;
-                    userStatus = ADMIN_USERS[username];
-                    document.getElementById('adminSection').style.display = 'grid';
-                    
-                    if (username === 'oksikwizer') {
-                        document.getElementById('statusBadge').className = 'status-badge status-admin';
-                        document.getElementById('statusBadge').textContent = 'Главный Админ';
-                    } else if (username === 'schattenkaiser_0') {
-                        document.getElementById('statusBadge').className = 'status-badge status-tech';
-                        document.getElementById('statusBadge').textContent = 'Тех. Админ';
+                const normalizedUsername = username.toLowerCase();
+                
+                let isUserAdmin = false;
+                let isUserApproved = false;
+                
+                Object.keys(ADMIN_USERS).forEach(adminUsername => {
+                    const normalizedAdmin = adminUsername.toLowerCase();
+                    if (normalizedUsername === normalizedAdmin) {
+                        isUserAdmin = true;
+                        isAdmin = true;
+                        userStatus = ADMIN_USERS[adminUsername].status;
+                        document.getElementById('adminSection').style.display = 'grid';
+                        
+                        if (normalizedUsername === 'oksikwizer') {
+                            document.getElementById('statusBadge').className = 'status-badge status-admin';
+                            document.getElementById('statusBadge').textContent = 'Главный Админ';
+                        } else if (normalizedUsername === 'schattenkaiser_0') {
+                            document.getElementById('statusBadge').className = 'status-badge status-tech';
+                            document.getElementById('statusBadge').textContent = 'Тех. Админ';
+                        }
                     }
-                }
+                });
                 
-                if (APPROVED_USERS.includes(username)) {
-                    hasSubmittedAnketa = true;
-                    document.getElementById('anketaStatus').textContent = 'Да';
+                Object.keys(APPROVED_USERS).forEach(approvedUsername => {
+                    const normalizedApproved = approvedUsername.toLowerCase();
+                    if (normalizedUsername === normalizedApproved) {
+                        isUserApproved = true;
+                        hasSubmittedAnketa = true;
+                        document.getElementById('anketaStatus').textContent = 'Да';
+                    }
+                });
+                
+                if (!isUserAdmin) {
+                    document.getElementById('statusBadge').className = 'status-badge status-user';
+                    document.getElementById('statusBadge').textContent = 'Обычный игрок';
                 }
                 
                 document.getElementById('playerStatus').textContent = userStatus;
@@ -1172,7 +1203,7 @@
 
         function checkAnketaStatus() {
             const messageInput = document.getElementById('messageInput');
-            if (!hasSubmittedAnketa) {
+            if (!hasSubmittedAnketa && !isAdmin) {
                 messageInput.disabled = true;
                 messageInput.placeholder = 'Сначала отправьте анкету в разделе "Прочее"';
             } else {
@@ -1197,8 +1228,13 @@
             
             if (ADMIN_ONLY_CHATS.includes(chatName)) {
                 adminOnlyNotice.style.display = 'block';
-                messageInput.disabled = true;
-                messageInput.placeholder = 'В этот чат могут писать только администраторы';
+                if (!isAdmin) {
+                    messageInput.disabled = true;
+                    messageInput.placeholder = 'В этот чат могут писать только администраторы';
+                } else {
+                    messageInput.disabled = false;
+                    messageInput.placeholder = 'Введите сообщение...';
+                }
             } else {
                 adminOnlyNotice.style.display = 'none';
                 checkAnketaStatus();
@@ -1266,6 +1302,7 @@
                 population: document.getElementById('population').value,
                 description: document.getElementById('description').value,
                 username: currentUser?.username,
+                user_id: currentUser?.id,
                 timestamp: new Date().toISOString()
             };
 
@@ -1292,7 +1329,7 @@
         }
 
         function sendMessage() {
-            if (!hasSubmittedAnketa && !ADMIN_ONLY_CHATS.includes(currentChat)) {
+            if (!hasSubmittedAnketa && !isAdmin && !ADMIN_ONLY_CHATS.includes(currentChat)) {
                 alert('Сначала отправьте анкету для участия в проекте!');
                 return;
             }
@@ -1382,7 +1419,8 @@
                             chat: chatName, 
                             content: message,
                             user_id: currentUser?.username || 'anonymous',
-                            user_name: currentUser?.first_name || 'Пользователь'
+                            user_name: currentUser?.first_name || 'Пользователь',
+                            telegram_id: currentUser?.id
                         }
                     ]);
                 
