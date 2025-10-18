@@ -13,6 +13,129 @@
             box-sizing: border-box;
         }
 
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .earth {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #4a8cff, #1a3c7a, #0a1f4d);
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 50px;
+            animation: rotateEarth 20s linear infinite;
+            box-shadow: 
+                0 0 50px rgba(74, 140, 255, 0.6),
+                inset -10px -10px 20px rgba(0, 0, 0, 0.3),
+                inset 10px 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .earth::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 30%;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #3a7a3a, #2d5a2d);
+            border-radius: 50%;
+            box-shadow: 
+                -5px -5px 10px rgba(0, 0, 0, 0.2),
+                2px 2px 5px rgba(255, 255, 255, 0.1);
+        }
+
+        .earth::after {
+            content: '';
+            position: absolute;
+            top: 60%;
+            right: 25%;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #a85534, #8b4513);
+            border-radius: 50%;
+            box-shadow: 
+                -3px -3px 8px rgba(0, 0, 0, 0.2),
+                1px 1px 4px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes rotateEarth {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-container {
+            width: 300px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: waveProgress 2s ease-in-out infinite;
+        }
+
+        @keyframes waveProgress {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-3px); }
+            75% { transform: translateX(2px); }
+        }
+
+        .percentage {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading-dots {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+
+        .main-content {
+            display: none;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             min-height: 100vh;
@@ -484,15 +607,32 @@
             margin-bottom: 10px;
             border-left: 4px solid #ff6b6b;
         }
+
+        .access-denied {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body class="dark-theme">
+    <div class="loading-screen" id="loadingScreen">
+        <div class="earth"></div>
+        <div class="loading-text">Загрузка P.W.</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="percentage" id="percentage">0%</div>
+        <div class="loading-dots"></div>
+    </div>
+
     <div class="stars" id="stars"></div>
     <div class="clouds" id="clouds" style="display: none;"></div>
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 11.2</div>
+    <div class="version">Alpha 11.6</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -502,6 +642,8 @@
             <button class="sidebar-btn" onclick="openChat('Даты')">📅 Даты</button>
             <button class="sidebar-btn" onclick="openChat('НРП ЧАТ (общий)')">💬 НРП ЧАТ (общий)</button>
             <button class="sidebar-btn" onclick="openChat('Правила Проекта')">📜 Правила Проекта</button>
+            <button class="sidebar-btn" onclick="openChat('Ивенты')">🎯 Ивенты</button>
+            <button class="sidebar-btn" onclick="openChat('НРК')">🔥 НРК</button>
         </div>
 
         <div class="sidebar-section">
@@ -553,12 +695,12 @@
         <div class="sidebar-section">
             <div class="sidebar-title">📈 Экономика и рейтинг</div>
             <button class="sidebar-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
+            <button class="sidebar-btn" onclick="openChat('Экономика')">💰 Экономика</button>
         </div>
 
         <div class="sidebar-section">
             <div class="sidebar-title">🎮 Игровые системы</div>
             <button class="sidebar-btn" onclick="openInterface('war')">⚔️ Войны</button>
-            <button class="sidebar-btn" onclick="openInterface('economy')">💰 Экономика</button>
             <button class="sidebar-btn" onclick="openInterface('profile')">👤 Профиль</button>
         </div>
 
@@ -733,14 +875,54 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let tg = Telegram.WebApp;
         
-        tg.expand();
-        tg.enableClosingConfirmation();
-        tg.setHeaderColor('#1a237e');
-        tg.backgroundColor = '#1a237e';
-
         const ADMIN_USERS = ['oksikwizer', 'schattenkaiser_0'];
+        const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила Проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
         let currentChat = null;
         let isAdmin = false;
+
+        function initLoadingScreen() {
+            const progressBar = document.getElementById('progressBar');
+            const percentage = document.getElementById('percentage');
+            const loadingScreen = document.getElementById('loadingScreen');
+            let progress = 0;
+            const totalTime = 25000;
+            const interval = 100;
+
+            const progressInterval = setInterval(() => {
+                progress += (interval / totalTime) * 100;
+                
+                if (progress > 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            document.querySelector('.main-content').style.display = 'block';
+                            initMainApp();
+                        }, 500);
+                    }, 500);
+                }
+
+                const waveProgress = Math.sin(progress * 0.1) * 5 + progress;
+                progressBar.style.width = Math.min(waveProgress, 100) + '%';
+                percentage.textContent = Math.round(progress) + '%';
+            }, interval);
+        }
+
+        function initMainApp() {
+            tg.expand();
+            tg.enableClosingConfirmation();
+            tg.setHeaderColor('#1a237e');
+            tg.backgroundColor = '#1a237e';
+
+            checkAdminRights();
+            createStars();
+            createClouds();
+            initChats();
+            initMusic();
+        }
 
         function checkAdminRights() {
             const user = tg.initDataUnsafe?.user;
@@ -785,10 +967,33 @@
             container.classList.toggle('sidebar-open');
         }
 
+        function canUserWriteToChat(chatName) {
+            if (ADMIN_ONLY_CHATS.includes(chatName)) {
+                return isAdmin;
+            }
+            return true;
+        }
+
         async function openChat(chatName) {
             currentChat = chatName;
             document.getElementById('currentChatName').textContent = chatName;
             showInterface('chatInterface');
+            
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendMessageBtn');
+            
+            if (canUserWriteToChat(chatName)) {
+                messageInput.disabled = false;
+                messageInput.placeholder = "Введите сообщение...";
+                sendBtn.disabled = false;
+                sendBtn.style.opacity = "1";
+            } else {
+                messageInput.disabled = true;
+                messageInput.placeholder = "Только админы могут писать в этот чат";
+                sendBtn.disabled = true;
+                sendBtn.style.opacity = "0.5";
+            }
+            
             await loadMessages(chatName);
             setupChatRealtime(chatName);
             toggleSidebar();
@@ -897,6 +1102,11 @@
             const message = messageInput.value.trim();
             
             if (!message || !currentChat) return;
+            
+            if (!canUserWriteToChat(currentChat)) {
+                alert('❌ Только администраторы могут писать в этот чат');
+                return;
+            }
 
             try {
                 const user = tg.initDataUnsafe?.user;
@@ -1039,6 +1249,9 @@
             playBtn.click();
         }
 
+        function initChats() {
+        }
+
         document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
         document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
         document.getElementById('messageInput').addEventListener('keypress', function(e) {
@@ -1048,10 +1261,8 @@
         });
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-        createStars();
-        createClouds();
-        initMusic();
-        checkAdminRights();
+        document.querySelector('.main-content').style.display = 'none';
+        initLoadingScreen();
     </script>
 </body>
 </html>
