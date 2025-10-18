@@ -44,9 +44,7 @@
                 radial-gradient(circle at 25% 35%, #228B22 5%, transparent 8%),
                 radial-gradient(circle at 65% 40%, #8B4513 8%, transparent 12%),
                 radial-gradient(circle at 45% 65%, #32CD32 6%, transparent 10%),
-                radial-gradient(circle at 75% 25%, #006400 7%, transparent 11%),
-                radial-gradient(circle at 35% 45%, rgba(255,255,255,0.9) 3%, transparent 6%),
-                radial-gradient(circle at 60% 30%, rgba(255,255,255,0.8) 2%, transparent 5%);
+                radial-gradient(circle at 75% 25%, #006400 7%, transparent 11%);
             border-radius: 50%;
             margin-bottom: 50px;
             animation: rotateEarth 25s linear infinite;
@@ -522,7 +520,7 @@
             font-weight: bold;
         }
 
-        .chat-interface, .war-interface, .economy-interface, .profile-interface, .admin-interface {
+        .chat-interface, .war-interface, .economy-interface, .profile-interface, .admin-interface, .news-interface {
             background: rgba(255,255,255,0.05);
             border-radius: 15px;
             padding: 20px;
@@ -536,7 +534,8 @@
         .light-theme .war-interface,
         .light-theme .economy-interface,
         .light-theme .profile-interface,
-        .light-theme .admin-interface {
+        .light-theme .admin-interface,
+        .light-theme .news-interface {
             background: rgba(255,255,255,0.3);
         }
 
@@ -560,6 +559,18 @@
             border-radius: 8px;
             border-left: 3px solid #7986cb;
             animation: messageAppear 0.3s ease-out;
+        }
+
+        .message-header {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .message-content {
+            font-size: 0.95em;
         }
 
         @keyframes messageAppear {
@@ -645,6 +656,92 @@
             padding: 10px;
             font-size: 0.9em;
         }
+
+        .news-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .light-theme .news-section {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .news-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #7986cb;
+        }
+
+        .light-theme .news-item {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .news-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #7986cb;
+        }
+
+        .light-theme .news-title {
+            color: #2c3e50;
+        }
+
+        .news-date {
+            font-size: 0.8em;
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        .admin-only-notice {
+            background: rgba(255,0,0,0.1);
+            border: 1px solid rgba(255,0,0,0.3);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .profile-info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .light-theme .profile-info {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-admin {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .status-tech {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+            color: white;
+        }
+
+        .status-user {
+            background: linear-gradient(45deg, #00b894, #55efc4);
+            color: white;
+        }
     </style>
 </head>
 <body class="dark-theme">
@@ -655,7 +752,6 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="percentage" id="percentage">0%</div>
-        <div class="loading-dots"></div>
     </div>
 
     <div class="stars" id="stars"></div>
@@ -663,7 +759,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 11.08</div>
+    <div class="version">Alpha 17.07</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -688,7 +784,6 @@
             <button class="sidebar-btn" onclick="openChat('КФ')">🟣 КФ</button>
             <button class="sidebar-btn" onclick="openChat('КНГ')">🟢 КНГ</button>
             <button class="sidebar-btn" onclick="openChat('ВНР')">🟡 ВНР</button>
-            <button class="sidebar-btn" onclick="openChat('СМ')">⚪ СМ</button>
             <button class="sidebar-btn" onclick="openChat('ФТ (Тианция)')">⭐ ФТ (Тианция)</button>
             <button class="sidebar-btn" onclick="openChat('АФ')">🔺 АФ</button>
             <button class="sidebar-btn" onclick="openChat('САИ')">🔸 САИ</button>
@@ -713,6 +808,8 @@
             <button class="sidebar-btn" onclick="openChat('ТДМ')">⚙️ ТДМ</button>
             <button class="sidebar-btn" onclick="openChat('Компании')">🏛️ Компании</button>
             <button class="sidebar-btn" onclick="openChat('Интервидение EBU')">🔈 Интервидение EBU</button>
+            <button class="sidebar-btn" onclick="openChat('СМ')">⚪ СМ</button>
+            <button class="sidebar-btn" onclick="openChat('СНБ')">🪖 СНБ</button>
         </div>
 
         <div class="sidebar-section">
@@ -735,6 +832,12 @@
             <button class="sidebar-btn" onclick="openChat('Военная техника')">🚀 Военная техника</button>
             <button class="sidebar-btn" onclick="openChat('Флаги')">🎌 Флаги</button>
         </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">⚙️ Прочее</div>
+            <button class="sidebar-btn" onclick="openInterface('anketa')">📝 Анкета</button>
+            <button class="sidebar-btn" onclick="openSettings()">⚙️ Настройки</button>
+        </div>
     </div>
 
     <div class="container" id="mainContainer">
@@ -748,9 +851,21 @@
             <button class="admin-btn" onclick="openInterface('war')">⚔️ Войны</button>
             <button class="admin-btn" onclick="openChat('Рейтинг')">📊 Рейтинг</button>
             <button class="admin-btn" onclick="openChat('Правила проекта')">📜 Правила</button>
+            <button class="admin-btn" onclick="openInterface('news')">📢 Новости</button>
         </div>
 
-        <div class="game-section" id="anketaSection">
+        <div class="news-section" id="newsSection">
+            <div class="game-title">📢 Новости проекта</div>
+            <div id="newsContainer">
+                <div class="news-item">
+                    <div class="news-title">Добро пожаловать в P.W. Alpha 17.07!</div>
+                    <div class="news-content">Запущена новая версия проекта с улучшенным интерфейсом и новыми функциями.</div>
+                    <div class="news-date">18.10.2025</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="anketa-section game-section" id="anketaSection" style="display: none;">
             <div class="anketa-header">📝 Анкета для участия в проекте</div>
             <form id="anketaForm">
                 <div class="form-group">
@@ -787,11 +902,20 @@
         <div class="chat-interface" id="chatInterface">
             <div class="game-title" id="chatTitle">Чат</div>
             <div class="messages-container" id="messagesContainer">
-                <div class="message">Добро пожаловать в чат! Начните общение.</div>
+                <div class="message">
+                    <div class="message-header">
+                        <span>Система</span>
+                        <span>Только что</span>
+                    </div>
+                    <div class="message-content">Добро пожаловать в чат! Начните общение.</div>
+                </div>
             </div>
             <div class="message-input">
                 <input type="text" id="messageInput" placeholder="Введите сообщение...">
                 <button class="send-btn" onclick="sendMessage()">Отправить</button>
+            </div>
+            <div id="adminOnlyNotice" class="admin-only-notice" style="display: none;">
+                В этот чат могут писать только администраторы
             </div>
         </div>
 
@@ -827,14 +951,19 @@
 
         <div class="profile-interface" id="profileInterface">
             <div class="game-title">👨‍💻 Профиль игрока</div>
-            <div class="form-group">
-                <label>Игрок: <strong id="playerName">Гость</strong></label>
-            </div>
-            <div class="form-group">
-                <label>Статус: <strong id="playerStatus">Новичок</strong></label>
-            </div>
-            <div class="form-group">
-                <label>Репутация: <strong id="playerReputation">100</strong></label>
+            <div class="profile-info">
+                <div class="form-group">
+                    <label>Игрок: <strong id="playerName">Гость</strong></label>
+                </div>
+                <div class="form-group">
+                    <label>Статус: <strong id="playerStatus">Новичок</strong> <span id="statusBadge" class="status-badge status-user">Обычный игрок</span></label>
+                </div>
+                <div class="form-group">
+                    <label>Репутация: <strong id="playerReputation">100</strong></label>
+                </div>
+                <div class="form-group">
+                    <label>Анкета отправлена: <strong id="anketaStatus">Нет</strong></label>
+                </div>
             </div>
         </div>
 
@@ -842,6 +971,30 @@
             <div class="game-title">👑 Админ-панель</div>
             <div id="adminContent">
                 <div class="access-denied">Доступ запрещен. Только для администраторов.</div>
+            </div>
+        </div>
+
+        <div class="news-interface" id="newsInterface" style="display: none;">
+            <div class="game-title">📢 Управление новостями</div>
+            <div class="form-group">
+                <label for="newsTitle">Заголовок новости:</label>
+                <input type="text" id="newsTitle" placeholder="Введите заголовок">
+            </div>
+            <div class="form-group">
+                <label for="newsContent">Содержание новости:</label>
+                <textarea id="newsContent" placeholder="Введите содержание новости..." rows="4"></textarea>
+            </div>
+            <button class="submit-btn" onclick="addNews()">📢 Опубликовать новость</button>
+        </div>
+
+        <div class="game-section" id="settingsSection" style="display: none;">
+            <div class="game-title">⚙️ Настройки</div>
+            <div class="form-group">
+                <label>Настройки интерфейса:</label>
+                <div style="text-align: center; padding: 40px;">
+                    <h3>🚧 В разработке</h3>
+                    <p>Данный раздел находится в разработке</p>
+                </div>
             </div>
         </div>
     </div>
@@ -858,10 +1011,23 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let tg = Telegram.WebApp;
         
-        const ADMIN_USERS = ['oksikwizer', 'schattenkaiser_0'];
+        const ADMIN_USERS = {
+            'oksikwizer': 'Главный Админ',
+            'schattenkaiser_0': 'Тех. Админ'
+        };
+        
+        const APPROVED_USERS = [
+            'prosto_katsu', 'ncsartist', 'indi224', 'seychellles0808', 
+            'brs6543', 'volnovich_37', 'kotovaski_halky', 'engelscb', 'ettet4t',
+            'oksikwizer', 'schattenkaiser_0'
+        ];
+        
         const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
         let currentChat = null;
         let isAdmin = false;
+        let userStatus = 'Обычный игрок';
+        let hasSubmittedAnketa = false;
+        let currentUser = null;
 
         function initLoadingScreen() {
             const progressBar = document.getElementById('progressBar');
@@ -896,8 +1062,9 @@
         function initMainApp() {
             createStars();
             initEventListeners();
-            checkAdminStatus();
+            checkUserStatus();
             initTelegram();
+            loadNews();
         }
 
         function createStars() {
@@ -921,6 +1088,9 @@
             document.getElementById('taxRate').addEventListener('input', updateTaxRate);
             document.getElementById('musicToggle').addEventListener('click', toggleMusic);
             document.getElementById('soundToggle').addEventListener('click', toggleSound);
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
         }
 
         function toggleSidebar() {
@@ -967,11 +1137,47 @@
             }
         }
 
-        function checkAdminStatus() {
-            const username = tg.initDataUnsafe?.user?.username;
-            if (username && ADMIN_USERS.includes(username)) {
-                isAdmin = true;
-                document.getElementById('adminSection').style.display = 'grid';
+        function checkUserStatus() {
+            const user = tg.initDataUnsafe?.user;
+            if (user) {
+                currentUser = user;
+                const username = user.username;
+                const firstName = user.first_name || 'Пользователь';
+                
+                document.getElementById('playerName').textContent = `${firstName} (@${username})`;
+                
+                if (ADMIN_USERS[username]) {
+                    isAdmin = true;
+                    userStatus = ADMIN_USERS[username];
+                    document.getElementById('adminSection').style.display = 'grid';
+                    
+                    if (username === 'oksikwizer') {
+                        document.getElementById('statusBadge').className = 'status-badge status-admin';
+                        document.getElementById('statusBadge').textContent = 'Главный Админ';
+                    } else if (username === 'schattenkaiser_0') {
+                        document.getElementById('statusBadge').className = 'status-badge status-tech';
+                        document.getElementById('statusBadge').textContent = 'Тех. Админ';
+                    }
+                }
+                
+                if (APPROVED_USERS.includes(username)) {
+                    hasSubmittedAnketa = true;
+                    document.getElementById('anketaStatus').textContent = 'Да';
+                }
+                
+                document.getElementById('playerStatus').textContent = userStatus;
+                checkAnketaStatus();
+            }
+        }
+
+        function checkAnketaStatus() {
+            const messageInput = document.getElementById('messageInput');
+            if (!hasSubmittedAnketa) {
+                messageInput.disabled = true;
+                messageInput.placeholder = 'Сначала отправьте анкету в разделе "Прочее"';
+            } else {
+                messageInput.disabled = false;
+                messageInput.placeholder = 'Введите сообщение...';
             }
         }
 
@@ -981,21 +1187,37 @@
         }
 
         function openChat(chatName) {
-            if (ADMIN_ONLY_CHATS.includes(chatName) && !isAdmin) {
-                alert('Доступ к этому чату только для администраторов');
-                return;
-            }
-
             currentChat = chatName;
             hideAllInterfaces();
             document.getElementById('chatInterface').style.display = 'block';
             document.getElementById('chatTitle').textContent = chatName;
+            
+            const adminOnlyNotice = document.getElementById('adminOnlyNotice');
+            const messageInput = document.getElementById('messageInput');
+            
+            if (ADMIN_ONLY_CHATS.includes(chatName)) {
+                adminOnlyNotice.style.display = 'block';
+                messageInput.disabled = true;
+                messageInput.placeholder = 'В этот чат могут писать только администраторы';
+            } else {
+                adminOnlyNotice.style.display = 'none';
+                checkAnketaStatus();
+            }
+            
             loadMessages(chatName);
         }
 
         function openInterface(interfaceType) {
             hideAllInterfaces();
-            document.getElementById(interfaceType + 'Interface').style.display = 'block';
+            if (interfaceType === 'anketa') {
+                document.getElementById('anketaSection').style.display = 'block';
+            } else if (interfaceType === 'news') {
+                if (isAdmin) {
+                    document.getElementById('newsInterface').style.display = 'block';
+                }
+            } else {
+                document.getElementById(interfaceType + 'Interface').style.display = 'block';
+            }
         }
 
         function openAdminPanel() {
@@ -1010,7 +1232,7 @@
                             <button class="submit-btn" onclick="manageUsers()">👥 Управление пользователями</button>
                         </div>
                         <div class="admin-feature">
-                            <button class="submit-btn" onclick="manageContent()">📝 Управление контентом</button>
+                            <button class="submit-btn" onclick="openInterface('news')">📢 Управление новостями</button>
                         </div>
                         <div class="admin-feature">
                             <button class="submit-btn" onclick="systemSettings()">⚙️ Системные настройки</button>
@@ -1020,11 +1242,18 @@
             }
         }
 
+        function openSettings() {
+            hideAllInterfaces();
+            document.getElementById('settingsSection').style.display = 'block';
+        }
+
         function hideAllInterfaces() {
-            const interfaces = ['chat', 'war', 'economy', 'profile', 'admin'];
+            const interfaces = ['chat', 'war', 'economy', 'profile', 'admin', 'news', 'anketa', 'settings'];
             interfaces.forEach(interface => {
-                document.getElementById(interface + 'Interface').style.display = 'none';
+                const element = document.getElementById(interface + (interface === 'anketa' ? 'Section' : 'Interface'));
+                if (element) element.style.display = 'none';
             });
+            document.getElementById('newsSection').style.display = 'block';
         }
 
         function submitAnketa(event) {
@@ -1036,14 +1265,38 @@
                 leaderName: document.getElementById('leaderName').value,
                 population: document.getElementById('population').value,
                 description: document.getElementById('description').value,
+                username: currentUser?.username,
                 timestamp: new Date().toISOString()
             };
 
             alert('Анкета отправлена на модерацию! Ожидайте проверки.');
             document.getElementById('anketaForm').reset();
+            
+            hasSubmittedAnketa = true;
+            document.getElementById('anketaStatus').textContent = 'Да (на модерации)';
+            checkAnketaStatus();
+            
+            saveAnketa(formData);
+        }
+
+        async function saveAnketa(anketaData) {
+            try {
+                const { error } = await supabase
+                    .from('anketas')
+                    .insert([anketaData]);
+                
+                if (error) throw error;
+            } catch (error) {
+                console.error('Ошибка сохранения анкеты:', error);
+            }
         }
 
         function sendMessage() {
+            if (!hasSubmittedAnketa && !ADMIN_ONLY_CHATS.includes(currentChat)) {
+                alert('Сначала отправьте анкету для участия в проекте!');
+                return;
+            }
+
             const messageInput = document.getElementById('messageInput');
             const message = messageInput.value.trim();
             
@@ -1051,9 +1304,19 @@
                 const messagesContainer = document.getElementById('messagesContainer');
                 const messageElement = document.createElement('div');
                 messageElement.className = 'message';
-                messageElement.textContent = message;
-                messagesContainer.appendChild(messageElement);
                 
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+                
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <span>${currentUser?.first_name || 'Пользователь'} (@${currentUser?.username || 'anon'})</span>
+                        <span>${timeString}</span>
+                    </div>
+                    <div class="message-content">${message}</div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
                 messageInput.value = '';
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 
@@ -1078,11 +1341,30 @@
                     data.forEach(msg => {
                         const messageElement = document.createElement('div');
                         messageElement.className = 'message';
-                        messageElement.textContent = msg.content;
+                        
+                        const time = new Date(msg.created_at);
+                        const timeString = time.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+                        
+                        messageElement.innerHTML = `
+                            <div class="message-header">
+                                <span>${msg.user_name || 'Пользователь'} (@${msg.user_id || 'anon'})</span>
+                                <span>${timeString}</span>
+                            </div>
+                            <div class="message-content">${msg.content}</div>
+                        `;
+                        
                         messagesContainer.appendChild(messageElement);
                     });
                 } else {
-                    messagesContainer.innerHTML = '<div class="message">Нет сообщений в этом чате</div>';
+                    messagesContainer.innerHTML = `
+                        <div class="message">
+                            <div class="message-header">
+                                <span>Система</span>
+                                <span>Только что</span>
+                            </div>
+                            <div class="message-content">Нет сообщений в этом чате</div>
+                        </div>
+                    `;
                 }
                 
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -1099,13 +1381,83 @@
                         { 
                             chat: chatName, 
                             content: message,
-                            user_id: tg.initDataUnsafe?.user?.id || 'anonymous'
+                            user_id: currentUser?.username || 'anonymous',
+                            user_name: currentUser?.first_name || 'Пользователь'
                         }
                     ]);
                 
                 if (error) throw error;
             } catch (error) {
                 console.error('Ошибка сохранения сообщения:', error);
+            }
+        }
+
+        async function loadNews() {
+            try {
+                const { data, error } = await supabase
+                    .from('news')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                
+                if (error) throw error;
+                
+                const newsContainer = document.getElementById('newsContainer');
+                
+                if (data && data.length > 0) {
+                    newsContainer.innerHTML = '';
+                    data.forEach(news => {
+                        const newsElement = document.createElement('div');
+                        newsElement.className = 'news-item';
+                        
+                        const date = new Date(news.created_at);
+                        const dateString = date.toLocaleDateString('ru-RU');
+                        
+                        newsElement.innerHTML = `
+                            <div class="news-title">${news.title}</div>
+                            <div class="news-content">${news.content}</div>
+                            <div class="news-date">${dateString}</div>
+                        `;
+                        
+                        newsContainer.appendChild(newsElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки новостей:', error);
+            }
+        }
+
+        async function addNews() {
+            if (!isAdmin) return;
+            
+            const title = document.getElementById('newsTitle').value.trim();
+            const content = document.getElementById('newsContent').value.trim();
+            
+            if (!title || !content) {
+                alert('Заполните все поля');
+                return;
+            }
+            
+            try {
+                const { error } = await supabase
+                    .from('news')
+                    .insert([
+                        {
+                            title: title,
+                            content: content,
+                            author: currentUser?.username
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                alert('Новость опубликована!');
+                document.getElementById('newsTitle').value = '';
+                document.getElementById('newsContent').value = '';
+                
+                loadNews();
+            } catch (error) {
+                console.error('Ошибка публикации новости:', error);
             }
         }
 
@@ -1144,10 +1496,6 @@
 
         function manageUsers() {
             alert('Функция управления пользователями');
-        }
-
-        function manageContent() {
-            alert('Функция управления контентом');
         }
 
         function systemSettings() {
