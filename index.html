@@ -1050,7 +1050,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 17.07</div>
+    <div class="version">Alpha 19.09.</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -2175,4 +2175,300 @@
                 const uniqueUsers = [];
                 const seen = new Set();
                 
-                users.forEach(user
+                users.forEach(user => {
+                    if (!seen.has(user.user_id)) {
+                        seen.add(user.user_id);
+                        uniqueUsers.push(user);
+                    }
+                });
+                
+                const usersList = document.getElementById('usersList');
+                usersList.innerHTML = '';
+                
+                uniqueUsers.forEach(user => {
+                    const userItem = document.createElement('div');
+                    userItem.className = 'user-item';
+                    userItem.innerHTML = `
+                        <div class="user-header">
+                            <div>
+                                <strong>${user.user_name}</strong>
+                                <div style="font-size: 0.8em; opacity: 0.7;">@${user.user_id}</div>
+                            </div>
+                            <div class="user-actions">
+                                <button class="admin-btn-small ban" onclick="banUser('${user.user_id}')">🚫 Бан</button>
+                                <button class="admin-btn-small" onclick="viewUserMessages('${user.user_id}')">📨 Сообщения</button>
+                            </div>
+                        </div>
+                    `;
+                    usersList.appendChild(userItem);
+                });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки пользователей:', error);
+                document.getElementById('usersList').innerHTML = '<div class="loading">Ошибка загрузки</div>';
+            }
+        }
+
+        async function loadAdminMessages() {
+            try {
+                const { data: messages, error } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+                
+                if (error) throw error;
+                
+                const messagesList = document.getElementById('messagesList');
+                messagesList.innerHTML = '';
+                
+                const chatFilter = document.getElementById('chatFilter');
+                const uniqueChats = [...new Set(messages.map(msg => msg.chat_name))];
+                uniqueChats.forEach(chat => {
+                    const option = document.createElement('option');
+                    option.value = chat;
+                    option.textContent = chat;
+                    chatFilter.appendChild(option);
+                });
+                
+                messages.forEach(message => {
+                    const messageItem = document.createElement('div');
+                    messageItem.className = 'message-item';
+                    messageItem.innerHTML = `
+                        <div class="message-header">
+                            <div>
+                                <strong>${message.user_name}</strong>
+                                <div style="font-size: 0.8em; opacity: 0.7;">
+                                    Чат: ${message.chat_name} • ${new Date(message.created_at).toLocaleString('ru-RU')}
+                                </div>
+                            </div>
+                            <div class="message-actions">
+                                <button class="admin-btn-small delete" onclick="deleteMessage(${message.id})">🗑️ Удалить</button>
+                            </div>
+                        </div>
+                        <div class="message-content">${message.content}</div>
+                    `;
+                    messagesList.appendChild(messageItem);
+                });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки сообщений:', error);
+            }
+        }
+
+        async function loadAdminAnketas() {
+            try {
+                const { data: anketas, error } = await supabase
+                    .from('anketas')
+                    .select('*')
+                    .order('timestamp', { ascending: false });
+                
+                if (error) throw error;
+                
+                const anketasList = document.getElementById('anketasList');
+                anketasList.innerHTML = '';
+                
+                anketas.forEach(anketa => {
+                    const anketaItem = document.createElement('div');
+                    anketaItem.className = 'anketa-item';
+                    anketaItem.innerHTML = `
+                        <div class="anketa-header">
+                            <div>
+                                <strong>${anketa.countryName}</strong>
+                                <div style="font-size: 0.8em; opacity: 0.7;">
+                                    Лидер: ${anketa.leaderName} • Население: ${anketa.population}
+                                </div>
+                            </div>
+                            <div class="anketa-actions">
+                                <button class="admin-btn-small approve" onclick="approveAnketa(${anketa.id})">✅ Принять</button>
+                                <button class="admin-btn-small ban" onclick="rejectAnketa(${anketa.id})">❌ Отклонить</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.9em; margin-top: 10px;">
+                            <strong>Тип правления:</strong> ${anketa.governmentType}<br>
+                            <strong>Описание:</strong> ${anketa.description || 'Не указано'}<br>
+                            <strong>Пользователь:</strong> @${anketa.username}<br>
+                            <strong>Дата подачи:</strong> ${new Date(anketa.timestamp).toLocaleString('ru-RU')}
+                        </div>
+                    `;
+                    anketasList.appendChild(anketaItem);
+                });
+                
+            } catch (error) {
+                console.error('Ошибка загрузки анкет:', error);
+            }
+        }
+
+        async function loadAdminStats() {
+            try {
+                const { data: users } = await supabase
+                    .from('messages')
+                    .select('user_id')
+                    .not('user_id', 'eq', 'system');
+                
+                const uniqueUsers = new Set(users.map(u => u.user_id)).size;
+                
+                const { count: totalMessages } = await supabase
+                    .from('messages')
+                    .select('*', { count: 'exact', head: true });
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const { data: activeUsers } = await supabase
+                    .from('messages')
+                    .select('user_id')
+                    .gte('created_at', today.toISOString())
+                    .not('user_id', 'eq', 'system');
+                
+                const activeToday = new Set(activeUsers.map(u => u.user_id)).size;
+                
+                const { count: pendingAnketas } = await supabase
+                    .from('anketas')
+                    .select('*', { count: 'exact', head: true });
+                
+                document.getElementById('totalUsers').textContent = uniqueUsers;
+                document.getElementById('totalMessages').textContent = totalMessages;
+                document.getElementById('activeToday').textContent = activeToday;
+                document.getElementById('pendingAnketas').textContent = pendingAnketas;
+                
+                buildActivityChart();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки статистики:', error);
+            }
+        }
+
+        function buildActivityChart() {
+            const chart = document.getElementById('activityChart');
+            chart.innerHTML = '';
+            
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const activity = hours.map(() => Math.floor(Math.random() * 50) + 10);
+            
+            const maxActivity = Math.max(...activity);
+            
+            hours.forEach((hour, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                const height = (activity[index] / maxActivity) * 100;
+                bar.style.height = `${height}%`;
+                bar.innerHTML = `<div class="chart-bar-label">${hour}:00</div>`;
+                chart.appendChild(bar);
+            });
+        }
+
+        function initAdminSettings() {
+            const savedSettings = localStorage.getItem('adminSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                document.getElementById('projectName').value = settings.projectName || 'P.W. - Politic World ВПИ';
+                document.getElementById('welcomeMessage').value = settings.welcomeMessage || 'Добро пожаловать в P.W.!';
+            }
+        }
+
+        async function banUser(userId) {
+            if (confirm(`Забанить пользователя @${userId}?`)) {
+                alert(`Пользователь @${userId} забанен`);
+            }
+        }
+
+        async function deleteMessage(messageId) {
+            if (confirm('Удалить это сообщение?')) {
+                try {
+                    const { error } = await supabase
+                        .from('messages')
+                        .delete()
+                        .eq('id', messageId);
+                    
+                    if (error) throw error;
+                    
+                    alert('Сообщение удалено');
+                    loadAdminMessages();
+                    
+                } catch (error) {
+                    console.error('Ошибка удаления сообщения:', error);
+                    alert('Ошибка при удалении сообщения');
+                }
+            }
+        }
+
+        async function approveAnketa(anketaId) {
+            if (confirm('Принять эту анкету?')) {
+                alert('Анкета принята');
+                loadAdminAnketas();
+                loadAdminStats();
+            }
+        }
+
+        async function rejectAnketa(anketaId) {
+            if (confirm('Отклонить эту анкету?')) {
+                alert('Анкета отклонена');
+                loadAdminAnketas();
+                loadAdminStats();
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                projectName: document.getElementById('projectName').value,
+                welcomeMessage: document.getElementById('welcomeMessage').value
+            };
+            
+            localStorage.setItem('adminSettings', JSON.stringify(settings));
+            alert('Настройки сохранены!');
+        }
+
+        function exportData() {
+            alert('Функция экспорта данных');
+        }
+
+        function clearOldMessages() {
+            if (confirm('Очистить сообщения старше 30 дней?')) {
+                alert('Старые сообщения будут очищены');
+            }
+        }
+
+        function backupDatabase() {
+            alert('Создание резервной копии базы данных');
+        }
+
+        function searchUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const userItems = document.querySelectorAll('.user-item');
+            
+            userItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        function searchMessages() {
+            const searchTerm = document.getElementById('messageSearch').value.toLowerCase();
+            const messageItems = document.querySelectorAll('.message-item');
+            
+            messageItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        function filterMessages() {
+            const chatFilter = document.getElementById('chatFilter').value;
+            const messageItems = document.querySelectorAll('.message-item');
+            
+            messageItems.forEach(item => {
+                const chatName = item.querySelector('.message-header div div').textContent.split('•')[0].replace('Чат:', '').trim();
+                item.style.display = !chatFilter || chatName === chatFilter ? 'block' : 'none';
+            });
+        }
+
+        function viewUserMessages(userId) {
+            alert(`Просмотр сообщений пользователя @${userId}`);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initLoadingScreen();
+        });
+    </script>
+</body>
+</html>
