@@ -39,43 +39,79 @@
         .earth {
             width: 150px;
             height: 150px;
-            background: 
-                radial-gradient(circle at 30% 30%, #1E90FF, #00008B 70%),
-                radial-gradient(circle at 25% 35%, #228B22 5%, transparent 8%),
-                radial-gradient(circle at 65% 40%, #8B4513 8%, transparent 12%),
-                radial-gradient(circle at 45% 65%, #32CD32 6%, transparent 10%),
-                radial-gradient(circle at 75% 25%, #006400 7%, transparent 11%);
             border-radius: 50%;
             margin-bottom: 50px;
             animation: rotateEarth 25s linear infinite;
+            position: relative;
+            background: 
+                radial-gradient(circle at 30% 30%, #1E90FF, #00008B 70%),
+                radial-gradient(circle at 25% 35%, #228B22 8%, transparent 12%),
+                radial-gradient(circle at 65% 40%, #8B4513 10%, transparent 14%),
+                radial-gradient(circle at 45% 65%, #32CD32 8%, transparent 12%),
+                radial-gradient(circle at 75% 25%, #006400 9%, transparent 13%),
+                radial-gradient(circle at 15% 75%, #8B4513 7%, transparent 11%),
+                radial-gradient(circle at 80% 70%, #228B22 6%, transparent 10%);
             box-shadow: 
                 0 0 80px rgba(30, 144, 255, 0.6),
-                inset -20px -20px 40px rgba(0, 0, 0, 0.5),
-                inset 10px 10px 20px rgba(255, 255, 255, 0.3);
-            position: relative;
+                inset -25px -25px 50px rgba(0, 0, 0, 0.6),
+                inset 15px 15px 30px rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255,255,255,0.1);
+            overflow: hidden;
         }
 
-        .earth::after {
-            content: '';
+        .earth-texture {
             position: absolute;
-            top: -5%;
-            left: -5%;
-            right: -5%;
-            bottom: -5%;
-            background: radial-gradient(circle at 50% 50%, transparent 30%, rgba(255,255,255,0.1) 100%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 40%, rgba(34, 139, 34, 0.8) 0%, transparent 25%),
+                radial-gradient(ellipse at 60% 30%, rgba(139, 69, 19, 0.7) 0%, transparent 20%),
+                radial-gradient(ellipse at 70% 60%, rgba(34, 139, 34, 0.6) 0%, transparent 18%),
+                radial-gradient(ellipse at 20% 70%, rgba(139, 69, 19, 0.6) 0%, transparent 15%),
+                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 12%),
+                radial-gradient(ellipse at 60% 50%, rgba(255, 255, 255, 0.2) 0%, transparent 10%),
+                radial-gradient(ellipse at 25% 60%, rgba(255, 255, 255, 0.25) 0%, transparent 8%);
             border-radius: 50%;
-            animation: glow 3s ease-in-out infinite alternate;
+            animation: rotateEarth 15s linear infinite reverse;
         }
 
-        @keyframes glow {
-            from { opacity: 0.3; }
-            to { opacity: 0.7; }
+        .atmosphere {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            right: -10%;
+            bottom: -10%;
+            background: radial-gradient(circle at 30% 30%, 
+                rgba(173, 216, 230, 0.1) 0%,
+                rgba(135, 206, 235, 0.05) 20%,
+                transparent 70%);
+            border-radius: 50%;
+            animation: atmosphereGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes atmosphereGlow {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(1.02); }
         }
 
         @keyframes rotateEarth {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .earth::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 20%;
+            height: 10%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 2;
+            filter: blur(2px);
         }
 
         .progress-container {
@@ -359,6 +395,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             border-left: 3px solid transparent;
+            position: relative;
         }
 
         .sidebar-btn:hover {
@@ -561,6 +598,17 @@
             animation: messageAppear 0.3s ease-out;
         }
 
+        .system-message {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(255, 140, 0, 0.1));
+            border-left: 4px solid #ff4444;
+            text-align: center;
+        }
+
+        .system-message .message-content {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
         .message-header {
             font-size: 0.8em;
             opacity: 0.7;
@@ -742,11 +790,83 @@
             background: linear-gradient(45deg, #00b894, #55efc4);
             color: white;
         }
+
+        .chat-indicator {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .unread-badge {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: #ff4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+            border: 2px solid white;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+
+        .dark-theme .unread-badge {
+            border-color: #0c1445;
+        }
+
+        .light-theme .unread-badge {
+            border-color: #87CEEB;
+        }
+
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+
+        .message-chat-source {
+            font-size: 0.7em;
+            opacity: 0.6;
+            margin-bottom: 2px;
+            color: #7986cb;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-source-icon {
+            font-size: 0.9em;
+        }
+
+        .unread-count {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 0.7em;
+            margin-left: 5px;
+        }
+
+        @keyframes highlightMessage {
+            0% { background: rgba(76, 175, 80, 0.3); }
+            100% { background: transparent; }
+        }
     </style>
 </head>
 <body class="dark-theme">
     <div class="loading-screen" id="loadingScreen">
-        <div class="earth"></div>
+        <div class="earth">
+            <div class="earth-texture"></div>
+            <div class="atmosphere"></div>
+        </div>
         <div class="loading-text">Загрузка P.W.</div>
         <div class="progress-container">
             <div class="progress-bar" id="progressBar"></div>
@@ -759,7 +879,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 17.08</div>
+    <div class="version">Alpha 19.01.</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -842,8 +962,7 @@
 
     <div class="container" id="mainContainer">
         <div class="header">
-            <div class="logo">P.W. - Politic World</div>
-            <div class="subtitle">Виртуальный Политический Имитатор</div>
+            <div class="logo">P.W. - Politic World ВПИ</div>
         </div>
 
         <div class="admin-section" id="adminSection" style="display: none;">
@@ -925,8 +1044,6 @@
                 <label for="warTarget">Цель войны:</label>
                 <select id="warTarget">
                     <option value="">Выберите страну-цель</option>
-                    <option value="Новолжская Федерация">Новолжская Федерация</option>
-                    <option value="АРА">АРА</option>
                 </select>
             </div>
             <div class="form-group">
@@ -1034,11 +1151,23 @@
         };
         
         const ADMIN_ONLY_CHATS = ['Рейтинг', 'Правила проекта', 'Даты', 'Карты', 'Экономика', 'Ивенты'];
+        const CHAT_CATEGORIES = {
+            '🗺️ Основные разделы': ['Карты', 'Армии стран', 'Даты', 'НРП чаты', 'Правила проекта', 'Ивенты'],
+            '🏛️ Государства': ['Новолжская Федерация', 'АРА', 'РС', 'АФД', 'Республика Фиррия', 'РФ', 'ФСИМР', 'КФ', 'КНГ', 'ВНР', 'ФТ (Тианция)', 'АФ', 'САИ', 'Ростовская Федерация', 'Индрастан', 'ЧРИ', 'ЭСИмгеР', 'ЧШО', 'РГА', 'ОНР'],
+            '📈 Экономика и рейтинг': ['Рейтинг', 'Экономика', 'Валюты стран'],
+            '🌐 Международные организации': ['ТДМ', 'Компании', 'Интервидение EBU', 'СМ', 'СНБ'],
+            '💬 Тематические чаты': ['Творчество', 'Мемы', 'Войны, СВО, Теракты', 'Исторические события', 'Военная техника', 'Флаги']
+        };
+        
         let currentChat = null;
         let isAdmin = false;
         let userStatus = 'Обычный игрок';
         let hasSubmittedAnketa = false;
         let currentUser = null;
+        let unreadMessages = {};
+        let lastMessageTimestamps = {};
+        let notificationCheckInterval;
+        let isAppInFocus = true;
 
         function initLoadingScreen() {
             const progressBar = document.getElementById('progressBar');
@@ -1076,6 +1205,8 @@
             checkUserStatus();
             initTelegram();
             loadNews();
+            initNotificationSystem();
+            updateWarTargets();
         }
 
         function createStars() {
@@ -1223,6 +1354,8 @@
             document.getElementById('chatInterface').style.display = 'block';
             document.getElementById('chatTitle').textContent = chatName;
             
+            resetUnreadIndicator(chatName);
+            
             const adminOnlyNotice = document.getElementById('adminOnlyNotice');
             const messageInput = document.getElementById('messageInput');
             
@@ -1338,26 +1471,8 @@
             const message = messageInput.value.trim();
             
             if (message && currentChat) {
-                const messagesContainer = document.getElementById('messagesContainer');
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message';
-                
-                const now = new Date();
-                const timeString = now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
-                
-                messageElement.innerHTML = `
-                    <div class="message-header">
-                        <span>${currentUser?.first_name || 'Пользователь'} (@${currentUser?.username || 'anon'})</span>
-                        <span>${timeString}</span>
-                    </div>
-                    <div class="message-content">${message}</div>
-                `;
-                
-                messagesContainer.appendChild(messageElement);
-                messageInput.value = '';
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                
                 saveMessage(currentChat, message);
+                messageInput.value = '';
             }
         }
 
@@ -1366,8 +1481,9 @@
                 const { data, error } = await supabase
                     .from('messages')
                     .select('*')
-                    .eq('chat', chatName)
-                    .order('created_at', { ascending: true });
+                    .eq('chat_name', chatName)
+                    .order('created_at', { ascending: true })
+                    .limit(100);
                 
                 if (error) throw error;
                 
@@ -1376,21 +1492,7 @@
                 
                 if (data && data.length > 0) {
                     data.forEach(msg => {
-                        const messageElement = document.createElement('div');
-                        messageElement.className = 'message';
-                        
-                        const time = new Date(msg.created_at);
-                        const timeString = time.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
-                        
-                        messageElement.innerHTML = `
-                            <div class="message-header">
-                                <span>${msg.user_name || 'Пользователь'} (@${msg.user_id || 'anon'})</span>
-                                <span>${timeString}</span>
-                            </div>
-                            <div class="message-content">${msg.content}</div>
-                        `;
-                        
-                        messagesContainer.appendChild(messageElement);
+                        addMessageToDOM(msg);
                     });
                 } else {
                     messagesContainer.innerHTML = `
@@ -1416,17 +1518,58 @@
                     .from('messages')
                     .insert([
                         { 
-                            chat: chatName, 
+                            chat_name: chatName,
                             content: message,
-                            user_id: currentUser?.username || 'anonymous',
-                            user_name: currentUser?.first_name || 'Пользователь',
+                            user_id: currentUser?.username,
+                            user_name: currentUser?.first_name,
                             telegram_id: currentUser?.id
                         }
                     ]);
                 
                 if (error) throw error;
+                
+                loadMessages(chatName);
+                
             } catch (error) {
                 console.error('Ошибка сохранения сообщения:', error);
+            }
+        }
+
+        function addMessageToDOM(message, isNew = false) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageElement = document.createElement('div');
+            
+            if (message.is_system_message) {
+                messageElement.className = 'message system-message';
+            } else {
+                messageElement.className = 'message';
+            }
+            
+            if (isNew) {
+                messageElement.style.animation = 'highlightMessage 2s ease-out';
+            }
+            
+            const time = new Date(message.created_at);
+            const timeString = time.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+            
+            messageElement.innerHTML = `
+                ${message.chat_name && !message.is_system_message ? `
+                    <div class="message-chat-source">
+                        <span class="chat-source-icon">💬</span>
+                        Чат: ${message.chat_name}
+                    </div>
+                ` : ''}
+                <div class="message-header">
+                    <span>${message.user_name || 'Пользователь'} ${message.user_id && message.user_id !== 'system' ? `(@${message.user_id})` : ''}</span>
+                    <span>${timeString}</span>
+                </div>
+                <div class="message-content">${message.content}</div>
+            `;
+            
+            messagesContainer.appendChild(messageElement);
+            
+            if (isNew) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         }
 
@@ -1499,6 +1642,24 @@
             }
         }
 
+        function updateWarTargets() {
+            const warTargetSelect = document.getElementById('warTarget');
+            warTargetSelect.innerHTML = '<option value="">Выберите страну-цель</option>';
+            
+            const allCountries = [
+                'Новолжская Федерация', 'АРА', 'РС', 'АФД', 'Республика Фиррия', 'РФ', 
+                'ФСИМР', 'КФ', 'КНГ', 'ВНР', 'ФТ (Тианция)', 'АФ', 'САИ', 
+                'Ростовская Федерация', 'Индрастан', 'ЧРИ', 'ЭСИмгеР', 'ЧШО', 'РГА', 'ОНР'
+            ];
+            
+            allCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                warTargetSelect.appendChild(option);
+            });
+        }
+
         function declareWar() {
             const target = document.getElementById('warTarget').value;
             const reason = document.getElementById('warReason').value;
@@ -1508,7 +1669,69 @@
                 return;
             }
             
-            alert(`Война объявлена ${target}! Причина: ${reason}`);
+            if (!currentUser) {
+                alert('Вы должны быть авторизованы для объявления войны');
+                return;
+            }
+            
+            const warMessage = `⚔️ ${currentUser.first_name} (@${currentUser.username}) объявил(а) войну ${target}\n📋 Причина: ${reason}\n🕒 ${new Date().toLocaleString('ru-RU')}`;
+            
+            sendWarAnnouncement(warMessage);
+            
+            saveWarDeclaration(target, reason);
+            
+            document.getElementById('warTarget').value = '';
+            document.getElementById('warReason').value = '';
+            
+            alert(`Война объявлена ${target}! Уведомление отправлено в соответствующий чат.`);
+        }
+
+        async function sendWarAnnouncement(message) {
+            try {
+                const { error } = await supabase
+                    .from('messages')
+                    .insert([
+                        { 
+                            chat_name: 'Войны, СВО, Теракты',
+                            content: message,
+                            user_id: 'system',
+                            user_name: 'Система войн',
+                            telegram_id: null,
+                            is_system_message: true
+                        }
+                    ]);
+                
+                if (error) throw error;
+                
+                if (currentChat === 'Войны, СВО, Теракты') {
+                    loadMessages(currentChat);
+                }
+                
+            } catch (error) {
+                console.error('Ошибка отправки уведомления о войне:', error);
+            }
+        }
+
+        async function saveWarDeclaration(target, reason) {
+            try {
+                const warData = {
+                    attacker: currentUser.username,
+                    attacker_name: currentUser.first_name,
+                    target_country: target,
+                    reason: reason,
+                    declared_at: new Date().toISOString(),
+                    status: 'active'
+                };
+                
+                const { error } = await supabase
+                    .from('wars')
+                    .insert([warData]);
+                
+                if (error) throw error;
+                
+            } catch (error) {
+                console.error('Ошибка сохранения данных о войне:', error);
+            }
         }
 
         function updateTaxRate() {
@@ -1538,6 +1761,138 @@
 
         function systemSettings() {
             alert('Функция системных настроек');
+        }
+
+        function initNotificationSystem() {
+            initializeLastTimestamps();
+            notificationCheckInterval = setInterval(checkForNewMessages, 5000);
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('focus', handleWindowFocus);
+            window.addEventListener('blur', handleWindowBlur);
+        }
+
+        function handleVisibilityChange() {
+            isAppInFocus = !document.hidden;
+            if (isAppInFocus && currentChat) {
+                resetUnreadIndicator(currentChat);
+            }
+        }
+
+        function handleWindowFocus() {
+            isAppInFocus = true;
+        }
+
+        function handleWindowBlur() {
+            isAppInFocus = false;
+        }
+
+        async function initializeLastTimestamps() {
+            const allChats = getAllChatsList();
+            
+            for (const chatName of allChats) {
+                const { data } = await supabase
+                    .from('messages')
+                    .select('created_at')
+                    .eq('chat_name', chatName)
+                    .order('created_at', { ascending: false })
+                    .limit(1);
+                
+                if (data && data.length > 0) {
+                    lastMessageTimestamps[chatName] = new Date(data[0].created_at).getTime();
+                } else {
+                    lastMessageTimestamps[chatName] = 0;
+                }
+                
+                unreadMessages[chatName] = 0;
+            }
+        }
+
+        function getAllChatsList() {
+            const allChats = [];
+            Object.values(CHAT_CATEGORIES).forEach(category => {
+                allChats.push(...category);
+            });
+            return allChats;
+        }
+
+        async function checkForNewMessages() {
+            if (!currentUser) return;
+            
+            const allChats = getAllChatsList();
+            
+            for (const chatName of allChats) {
+                if (chatName === currentChat && isAppInFocus) continue;
+                
+                const lastTimestamp = lastMessageTimestamps[chatName] || 0;
+                
+                const { data } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .eq('chat_name', chatName)
+                    .gt('created_at', new Date(lastTimestamp).toISOString())
+                    .order('created_at', { ascending: true });
+                
+                if (data && data.length > 0) {
+                    unreadMessages[chatName] = (unreadMessages[chatName] || 0) + data.length;
+                    
+                    const latestMessage = data[data.length - 1];
+                    lastMessageTimestamps[chatName] = new Date(latestMessage.created_at).getTime();
+                    
+                    updateChatIndicator(chatName);
+                    
+                    if (!isAppInFocus && data.length > 0) {
+                        showDesktopNotification(chatName, data[data.length - 1]);
+                    }
+                }
+            }
+        }
+
+        function showDesktopNotification(chatName, message) {
+            if (!("Notification" in window)) return;
+            
+            if (Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+            
+            if (Notification.permission === "granted") {
+                const notification = new Notification(`P.W. - ${chatName}`, {
+                    body: `${message.user_name}: ${message.content.substring(0, 100)}${message.content.length > 100 ? '...' : ''}`,
+                    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌎</text></svg>',
+                    tag: 'pw-chat'
+                });
+                
+                notification.onclick = function() {
+                    window.focus();
+                    openChat(chatName);
+                };
+                
+                setTimeout(() => notification.close(), 5000);
+            }
+        }
+
+        function updateChatIndicator(chatName) {
+            const unreadCount = unreadMessages[chatName] || 0;
+            const sidebarButtons = document.querySelectorAll('.sidebar-btn');
+            
+            sidebarButtons.forEach(btn => {
+                if (btn.textContent.includes(chatName)) {
+                    const oldBadge = btn.querySelector('.unread-badge');
+                    if (oldBadge) oldBadge.remove();
+                    
+                    if (unreadCount > 0) {
+                        const badge = document.createElement('span');
+                        badge.className = 'unread-badge';
+                        badge.textContent = '!';
+                        badge.title = `${unreadCount} нов${unreadCount === 1 ? 'ое' : 'ых'} сообщ${unreadCount === 1 ? 'ение' : 'ений'}`;
+                        btn.appendChild(badge);
+                    }
+                }
+            });
+        }
+
+        function resetUnreadIndicator(chatName) {
+            unreadMessages[chatName] = 0;
+            updateChatIndicator(chatName);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
