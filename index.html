@@ -859,6 +859,177 @@
             0% { background: rgba(76, 175, 80, 0.3); }
             100% { background: transparent; }
         }
+
+        /* Стили для админ-панели */
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        
+        .admin-tab-btn {
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 8px;
+            color: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab-btn.active {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid #4caf50;
+        }
+        
+        .admin-tab-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .admin-tab-content {
+            display: none;
+        }
+        
+        .admin-tab-content.active {
+            display: block;
+        }
+        
+        .admin-search {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .admin-search input, .admin-search select {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: inherit;
+        }
+        
+        .users-list, .messages-list, .anketas-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .user-item, .message-item, .anketa-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #7986cb;
+        }
+        
+        .user-header, .message-header, .anketa-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .user-actions, .message-actions, .anketa-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .admin-btn-small {
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 4px;
+            color: inherit;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .admin-btn-small.ban {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: #f44336;
+        }
+        
+        .admin-btn-small.approve {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4caf50;
+        }
+        
+        .admin-btn-small.delete {
+            background: rgba(255, 152, 0, 0.2);
+            border-color: #ff9800;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #7986cb;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .chart-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+        
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #7986cb, #3949ab);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+        }
+        
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        
+        .settings-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52) !important;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body class="dark-theme">
@@ -879,7 +1050,7 @@
 
     <button class="menu-toggle" id="menuToggle">☰</button>
     <button class="theme-toggle" id="themeToggle">🌙</button>
-    <div class="version">Alpha 19.01.</div>
+    <div class="version">Alpha 17.07</div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-section">
@@ -1396,18 +1567,99 @@
             if (isAdmin) {
                 document.getElementById('adminContent').innerHTML = `
                     <div class="admin-panel">
-                        <h3>Административные функции</h3>
-                        <div class="admin-feature">
-                            <button class="submit-btn" onclick="manageUsers()">👥 Управление пользователями</button>
+                        <h3>👑 Административная панель</h3>
+                        
+                        <div class="admin-tabs">
+                            <button class="admin-tab-btn active" onclick="switchAdminTab('users')">👥 Пользователи</button>
+                            <button class="admin-tab-btn" onclick="switchAdminTab('messages')">✉️ Сообщения</button>
+                            <button class="admin-tab-btn" onclick="switchAdminTab('anketas')">📝 Анкеты</button>
+                            <button class="admin-tab-btn" onclick="switchAdminTab('stats')">📊 Статистика</button>
+                            <button class="admin-tab-btn" onclick="switchAdminTab('settings')">⚙️ Настройки</button>
                         </div>
-                        <div class="admin-feature">
-                            <button class="submit-btn" onclick="openInterface('news')">📢 Управление новостями</button>
+                        
+                        <div id="adminUsersTab" class="admin-tab-content active">
+                            <div class="admin-search">
+                                <input type="text" id="userSearch" placeholder="Поиск пользователей..." onkeyup="searchUsers()">
+                            </div>
+                            <div class="users-list" id="usersList">
+                                <div class="loading">Загрузка пользователей...</div>
+                            </div>
                         </div>
-                        <div class="admin-feature">
-                            <button class="submit-btn" onclick="systemSettings()">⚙️ Системные настройки</button>
+                        
+                        <div id="adminMessagesTab" class="admin-tab-content">
+                            <div class="admin-search">
+                                <input type="text" id="messageSearch" placeholder="Поиск сообщений..." onkeyup="searchMessages()">
+                                <select id="chatFilter" onchange="filterMessages()">
+                                    <option value="">Все чаты</option>
+                                </select>
+                            </div>
+                            <div class="messages-list" id="messagesList">
+                                <div class="loading">Загрузка сообщений...</div>
+                            </div>
+                        </div>
+                        
+                        <div id="adminAnketasTab" class="admin-tab-content">
+                            <div class="anketas-list" id="anketasList">
+                                <div class="loading">Загрузка анкет...</div>
+                            </div>
+                        </div>
+                        
+                        <div id="adminStatsTab" class="admin-tab-content">
+                            <div class="stats-container">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="totalUsers">0</div>
+                                    <div class="stat-label">Всего пользователей</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="totalMessages">0</div>
+                                    <div class="stat-label">Всего сообщений</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="activeToday">0</div>
+                                    <div class="stat-label">Активных сегодня</div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="pendingAnketas">0</div>
+                                    <div class="stat-label">Анкет на модерации</div>
+                                </div>
+                            </div>
+                            <div class="activity-chart">
+                                <h4>Активность по часам</h4>
+                                <div id="activityChart" class="chart-container"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="adminSettingsTab" class="admin-tab-content">
+                            <div class="settings-section">
+                                <h4>Настройки проекта</h4>
+                                <div class="form-group">
+                                    <label for="projectName">Название проекта:</label>
+                                    <input type="text" id="projectName" value="P.W. - Politic World ВПИ">
+                                </div>
+                                <div class="form-group">
+                                    <label for="welcomeMessage">Приветственное сообщение:</label>
+                                    <textarea id="welcomeMessage" rows="3">Добро пожаловать в P.W.!</textarea>
+                                </div>
+                                <button class="submit-btn" onclick="saveSettings()">💾 Сохранить настройки</button>
+                            </div>
+                            
+                            <div class="settings-section">
+                                <h4>Системные функции</h4>
+                                <div class="admin-feature">
+                                    <button class="submit-btn" onclick="exportData()">📤 Экспорт данных</button>
+                                    <button class="submit-btn" onclick="clearOldMessages()">🗑️ Очистить старые сообщения</button>
+                                    <button class="submit-btn danger" onclick="backupDatabase()">💾 Резервная копия</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
+                
+                loadAdminUsers();
+                loadAdminMessages();
+                loadAdminAnketas();
+                loadAdminStats();
+                initAdminSettings();
             }
         }
 
@@ -1895,9 +2147,32 @@
             updateChatIndicator(chatName);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initLoadingScreen();
-        });
-    </script>
-</body>
-</html>
+        // Функции админ-панели
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(`admin${tabName.charAt(0).toUpperCase() + tabName.slice(1)}Tab`).classList.add('active');
+            
+            event.target.classList.add('active');
+        }
+
+        async function loadAdminUsers() {
+            try {
+                const { data: users, error } = await supabase
+                    .from('messages')
+                    .select('user_id, user_name')
+                    .not('user_id', 'eq', 'system')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const uniqueUsers = [];
+                const seen = new Set();
+                
+                users.forEach(user
